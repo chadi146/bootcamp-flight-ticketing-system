@@ -1,0 +1,48 @@
+.results-header {
+  padding: 1rem 2rem;
+  background-color: #e6f7ff;
+  color: #003366;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 2rem;
+}
+
+.flight-card {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.flight-card h3 {
+  margin: 0;
+  color: #00264d;
+}
+
+.flight-card p {
+  margin: 0.5rem 0;
+}
+
+.btn {
+  background-color: #00bfff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background-color: #006699;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}

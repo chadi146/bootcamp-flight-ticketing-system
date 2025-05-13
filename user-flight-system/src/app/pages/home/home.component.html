@@ -1,0 +1,31 @@
+<div class="home-container">
+  <div class="form-container">
+    <form class="search-form">
+      <div class="input-group">
+        <label for="station-from">From:</label>
+        <select id="station-from" class="input-box">
+          <option *ngFor="let station of stations" [value]="station">{{ station }}</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="station-to">To:</label>
+        <select id="station-to" class="input-box">
+          <option *ngFor="let station of stations" [value]="station">{{ station }}</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="travel-date">Date:</label>
+        <input id="travel-date" type="date" class="input-box" />
+      </div>
+
+      <button type="button" class="search-btn" (click)="search()">Search</button>
+    </form>
+  </div>
+
+  <div class="image-container">
+    <h1 class="main-heading">Book Your Flight with <br><span class="image-span">ALTIVIO</span></h1>
+    <img src="/fi2.jpg" alt="Flights" />
+  </div>
+</div>

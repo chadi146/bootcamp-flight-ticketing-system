@@ -1,0 +1,21 @@
+<div class="layout">
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="/new-ticket" routerLinkActive="active">New Ticket</a>
+      <a routerLink="/flights" routerLinkActive="active">Flight Search</a>
+      <a routerLink="/payment" routerLinkActive="active">Payment</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <button (click)="logout()">Logout</button>
+    </header>
+
+    <section class="page-content">
+      <router-outlet></router-outlet> <!-- This is where nested routes will display -->
+    </section>
+  </main>
+</div>

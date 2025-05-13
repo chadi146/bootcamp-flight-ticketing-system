@@ -1,0 +1,15 @@
+<h2>Payment</h2>
+<p>Booking ID: {{ bookingId }}</p>
+
+<form (ngSubmit)="makePayment()">
+  <label>Card Number:</label>
+  <input type="text" required placeholder="1234 5678 9012 3456" />
+
+  <label>Expiry:</label>
+  <input type="text" required placeholder="MM/YY" />
+
+  <label>CVV:</label>
+  <input type="text" required placeholder="123" />
+
+  <button type="submit">Pay Now</button>
+</form>

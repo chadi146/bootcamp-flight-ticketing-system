@@ -1,0 +1,33 @@
+<h1>Welcome, Admin</h1>
+
+<div class="stats-grid">
+  <div class="card" *ngFor="let stat of stats">
+    <h2>{{ stat.value }}</h2>
+    <p>{{ stat.label }}</p>
+  </div>
+</div>
+
+<h2>Recent Bookings</h2>
+<table class="bookings-table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Flight</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let booking of recentBookings">
+      <td>{{ booking.user }}</td>
+      <td>{{ booking.flight }}</td>
+      <td>{{ booking.status }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- <div class="actions">
+ <button routerLink="/new-ticket" routerLinkActive="active">Add Booking</button>
+<button routerLink="/flights" routerLinkActive="active">Search Flights</button>
+<button routerLink="/payment" routerLinkActive="active">Simulate Payment</button>
+
+</div> -->

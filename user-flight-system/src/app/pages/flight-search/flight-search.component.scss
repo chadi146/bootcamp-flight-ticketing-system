@@ -1,0 +1,46 @@
+h2 {
+    margin-bottom: 1rem;
+}
+
+.filter-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+
+    input {
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        width: 200px;
+    }
+}
+
+.flight-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f1f5f9;
+    }
+
+    button {
+        background-color: #22c55e;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #16a34a;
+        }
+    }
+}

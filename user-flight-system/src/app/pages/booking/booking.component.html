@@ -1,0 +1,22 @@
+<<<<<<< HEAD
+<div class="results-header">
+  <h2>Flights from {{ from }} to {{ to }} on {{ date }}</h2>
+  <p>{{ flights.length }} results found</p>
+</div>
+
+<div class="card-grid">
+  <div class="flight-card" *ngFor="let flight of flights">
+    <h3>{{ flight.airline }}</h3>
+    <p>Time: {{ flight.time }}</p>
+    <p>Price: ${{ flight.price }}</p>
+    <button class="btn">Book Now</button>
+    <button class="btn secondary">Check Availability</button>
+  </div>
+</div>
+=======
+<h2>Booking Flight</h2>
+<p>Flight ID: {{ flightId }}</p>
+
+<!-- Simulated booking UI -->
+<button (click)="confirmBooking()">Confirm Booking</button>
+>>>>>>> feature/admin-dashboard

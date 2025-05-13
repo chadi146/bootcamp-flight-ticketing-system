@@ -1,0 +1,37 @@
+<h2>Search Flights</h2>
+
+<form class="filter-form">
+  <input type="date" [(ngModel)]="filters.date" name="date" placeholder="Date" />
+  <input type="text" [(ngModel)]="filters.from" name="from" placeholder="From" />
+  <input type="text" [(ngModel)]="filters.to" name="to" placeholder="To" />
+  <input type="number" [(ngModel)]="filters.maxPrice" name="maxPrice" placeholder="Max Price" />
+</form>
+
+<table class="flight-table" *ngIf="filteredFlights.length > 0; else noResults">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Time</th>
+      <th>Price ($)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let flight of filteredFlights">
+      <td>{{ flight.date }}</td>
+      <td>{{ flight.from }}</td>
+      <td>{{ flight.to }}</td>
+      <td>{{ flight.time }}</td>
+      <td>{{ flight.price }}</td>
+      <td>
+        <button routerLink="/new-ticket">Book</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noResults>
+  <p>No flights found matching the criteria.</p>
+</ng-template>
