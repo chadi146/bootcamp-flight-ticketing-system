@@ -1,15 +1,19 @@
-<h2>Payment</h2>
-<p>Booking ID: {{ bookingId }}</p>
+<div class="payment-container">
+  <h2>Payment Details</h2>
 
-<form (ngSubmit)="makePayment()">
-  <label>Card Number:</label>
-  <input type="text" required placeholder="1234 5678 9012 3456" />
+  <div *ngFor="let flight of flights" class="flight-card">
+    <div class="flight-details">
+      <h3>{{ flight.airline }}</h3>
+      <p>Time: {{ flight.time }}</p>
+      <p>Price: ${{ flight.price }}</p>
+    </div>
+  </div>
 
-  <label>Expiry:</label>
-  <input type="text" required placeholder="MM/YY" />
+  <div class="total-price">
+    <p>Total: ${{ total }}</p>
+  </div>
 
-  <label>CVV:</label>
-  <input type="text" required placeholder="123" />
-
-  <button type="submit">Pay Now</button>
-</form>
+  <div class="actions">
+    <button class="btn primary" (click)="confirmPayment()">Confirm Payment</button>
+  </div>
+</div>

@@ -9,7 +9,7 @@
     <h3>{{ flight.airline }}</h3>
     <p>Time: {{ flight.time }}</p>
     <p>Price: ${{ flight.price }}</p>
-    <button class="btn">Book Now</button>
+    <button class="btn" (click)="bookNow(flight)">Book Now</button>
     <button class="btn secondary">Check Availability</button>
   </div>
 </div>

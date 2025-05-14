@@ -1,0 +1,18 @@
+<div class="purchase-container" *ngIf="flights.length > 0; else empty">
+  <h2>Booked Flights</h2>
+
+  <div class="flight-card" *ngFor="let flight of flights; let i = index">
+    <p><strong>Airline:</strong> {{ flight.airline }}</p>
+    <p><strong>Time:</strong> {{ flight.time }}</p>
+    <p><strong>Price:</strong> ${{ flight.price }}</p>
+    <button class="btn danger" (click)="deleteFlight(i)">Delete</button>
+  </div>
+
+  <hr />
+  <h3>Total: ${{ total }}</h3>
+  <button class="btn primary" (click)="completePurchase()">Purchase</button>
+</div>
+
+<ng-template #empty>
+  <p>No booked flights.</p>
+</ng-template>
