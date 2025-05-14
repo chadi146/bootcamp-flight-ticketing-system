@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { Component, inject ,OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -38,27 +38,6 @@ export class BookingComponent implements OnInit {
         { airline: 'AirCloud', price: 180,time: '02:15 9M', id: 2 }
       ];
     });
-=======
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
-@Component({
-  selector: 'app-booking',
-  templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.scss']
-})
-export class BookingComponent implements OnInit {
-  flightId: string | null = null;
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
-
-  ngOnInit(): void {
-    this.flightId = this.route.snapshot.paramMap.get('id');
-  }
-
-  confirmBooking() {
-    const mockBookingId = 'ABC123'; // Simulate creating a booking
-    this.router.navigate(['/payment', mockBookingId]);
->>>>>>> feature/admin-dashboard
   }
 }
