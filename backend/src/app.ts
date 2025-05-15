@@ -1,11 +1,20 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import cors from 'cors';
+import adminTestRoutes from './routes/adminTest';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes';
+dotenv.config();
 const app = express();
- const port = 3000;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, World!');
- });
+app.use(cors());
+app.use(express.json());
+app.use('/api', adminTestRoutes);
+app.use('/api/users', userRoutes);
 
-app.listen(port, () => {
-     console.log(`Server running at http://localhost:${port}`);
- });
+app.get('/', (req, res) => {
+  res.send('Flight Booking API is running ✈️');
+});
+
+// other routes...
+
+export default app;
