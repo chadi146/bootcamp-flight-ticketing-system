@@ -1,6 +1,4 @@
 import express from 'express';
-import { authenticate } from '../middlewares/auth';
-import { isAdmin } from '../middlewares/isAdmin';
 import { createFlight, deleteFlight, updateFlight, getFlights, getFlightLocations } from '../controllers/flightController';
 import { getFlightById } from '../controllers/flightController';
 
