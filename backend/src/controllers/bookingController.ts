@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
-import { BookingStatus, PaymentStatus } from '@prisma/client';
+import { BookingStatus } from '@prisma/client';
 
 // Get all bookings (admin)
 export const getBookings = async (req: Request, res: Response) => {
