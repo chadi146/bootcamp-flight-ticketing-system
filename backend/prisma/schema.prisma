@@ -6,10 +6,72 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+}
+
+model Flight {
+  id            Int       @id @default(autoincrement())
+  flightNumber  String
+  origin        String
+  destination   String
+  date          DateTime
+  time          String
+  duration      String
+  price         Decimal   @db.Decimal(10, 2)
+  seats         Int
+  bookings      Booking[]
+  createdAt     DateTime  @default(now())
+}
+
+model Booking {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  flightId    Int
+  status      BookingStatus
+  bookingDate DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+  flight      Flight    @relation(fields: [flightId], references: [id])
+  payment     Payment?
+}
+
+model Payment {
+  id          Int       @id @default(autoincrement())
+  bookingId   Int       @unique
+  amount      Decimal   @db.Decimal(10, 2)
+  status      PaymentStatus
+  paymentDate DateTime  @default(now())
+
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum BookingStatus {
+  confirmed
+  cancelled
+}
+
+enum PaymentStatus {
+  accepted
+  failed
+}
+
