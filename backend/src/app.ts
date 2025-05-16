@@ -9,7 +9,10 @@ import bookingRoutes from './routes/bookingRoutes';
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:4200', // <-- Angular runs on this
+  credentials: true,
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => {
