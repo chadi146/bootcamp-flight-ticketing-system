@@ -4,6 +4,8 @@ import adminTestRoutes from './routes/adminTest';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import flightRoutes from './routes/flightRoutes'
+import paymentRoutes from './routes/paymentRoutes';
+import bookingRoutes from './routes/bookingRoutes'; 
 dotenv.config();
 const app = express();
 
@@ -18,6 +20,9 @@ app.get('/', (req, res) => {
 app.use('/api', adminTestRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/flights', flightRoutes);
+app.use('/bookings', bookingRoutes);
+// After setting up middlewares like express.json()
+app.use('/payments', paymentRoutes);
 
 
 // other routes...

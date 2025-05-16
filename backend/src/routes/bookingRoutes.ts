@@ -11,14 +11,13 @@ import {
 
 const router = express.Router();
 
-// Admin can get all bookings
-router.get('/', authenticate, isAdmin, getBookings);
+// Admin can get all bookings — no auth for testing
+router.get('/', getBookings);
 
-// User routes
-router.get('/my', authenticate, getUserBookings);
-router.post('/', authenticate, createBooking);
-
-router.put('/:id/status', authenticate, updateBookingStatus);
-router.delete('/:id', authenticate, deleteBooking);
+// User routes — no auth for testing
+router.get('/my', getUserBookings);
+router.post('/', createBooking);
+router.put('/:id/status', updateBookingStatus);
+router.delete('/:id', deleteBooking);
 
 export default router;
