@@ -61,3 +61,49 @@ export const deleteFlight = async (req: Request, res: Response) => {
     res.status(404).json({ message: 'Flight not found or error deleting', error: err });
   }
 };
+
+
+export const getFlightLocations = async (req: Request, res: Response) => {
+  try {
+    const origins = await prisma.flight.findMany({
+      distinct: ['origin'],
+      select: { origin: true },
+    });
+
+    const destinations = await prisma.flight.findMany({
+      distinct: ['destination'],
+      select: { destination: true },
+    });
+
+    const uniqueOrigins = origins.map((o: { origin: string }) => o.origin);
+    const uniqueDestinations = destinations.map((d: { destination: string }) => d.destination);
+
+    res.json({
+      origins: uniqueOrigins,
+      destinations: uniqueDestinations,
+    });
+  } catch (error) {
+    console.error('Error fetching flight locations:', error);
+    res.status(500).json({ error: 'Failed to fetch flight locations' });
+  }
+};
+
+export const getFlightById = async (req: Request, res: Response): Promise<void> => {
+  const flightId = parseInt(req.params.id);
+
+  try {
+    const flight = await prisma.flight.findUnique({
+      where: { id: flightId },
+    });
+
+    if (!flight) {
+      res.status(404).json({ message: 'Flight not found' });
+      return;
+    }
+
+    res.json(flight);
+  } catch (error) {
+    console.error('Error fetching flight by ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
