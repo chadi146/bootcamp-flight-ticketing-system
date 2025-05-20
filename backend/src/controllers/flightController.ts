@@ -7,28 +7,32 @@ export const getFlights = async (req: Request, res: Response) => {
 };
 
 export const createFlight = async (req: Request, res: Response) => {
-  const { flightNumber, origin, destination, departureTime, durationMinutes, price, seats } = req.body;
+  const { flightNumber, origin, destination, date, time, duration, price, seats } = req.body;
+
   try {
     const flight = await prisma.flight.create({
       data: {
         flightNumber,
         origin,
         destination,
-        departureTime: new Date(departureTime),
-        durationMinutes,
+        date: new Date(date), // Ensure this is a valid ISO string or timestamp
+        time,
+        duration,
         price,
         seats,
       },
     });
     res.status(201).json(flight);
   } catch (err) {
+    console.error('Error creating flight:', err);
     res.status(400).json({ message: 'Error creating flight', error: err });
   }
 };
 
+
 export const updateFlight = async (req: Request, res: Response) => {
   const flightId = parseInt(req.params.id);
-  const { flightNumber, origin, destination, departureTime, durationMinutes, price, seats } = req.body;
+  const { flightNumber, origin, destination, date, time, duration, price, seats } = req.body;
 
   try {
     const updatedFlight = await prisma.flight.update({
@@ -37,8 +41,9 @@ export const updateFlight = async (req: Request, res: Response) => {
         flightNumber,
         origin,
         destination,
-        departureTime: new Date(departureTime),
-        durationMinutes,
+        date: new Date(date),
+        time,
+        duration,
         price,
         seats,
       },
@@ -48,6 +53,8 @@ export const updateFlight = async (req: Request, res: Response) => {
     res.status(404).json({ message: 'Flight not found or error updating', error: err });
   }
 };
+
+
 
 export const deleteFlight = async (req: Request, res: Response) => {
   const flightId = parseInt(req.params.id);

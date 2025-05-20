@@ -1,12 +1,16 @@
+// app.component.ts
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet, Routes } from '@angular/router';
+import { FlightSearchComponent } from '../app/pages/flight-search/flight-search.component';
+
+const routes: Routes = [
+  { path: '', component: FlightSearchComponent }
+];
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  template: '<router-outlet></router-outlet>',
 })
-export class AppComponent {
-  title = 'admin-dashbored';
-}
+export class AppComponent {}

@@ -1,46 +1,79 @@
-h2 {
-    margin-bottom: 1rem;
-}
+.new-flight-form {
+    max-width: 480px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-.filter-form {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-
-    input {
-        padding: 0.5rem;
-        border: 1px solid #cbd5e1;
-        border-radius: 4px;
-        width: 200px;
-    }
-}
-
-.flight-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-        padding: 0.75rem;
-        border: 1px solid #e2e8f0;
-        text-align: center;
+    form {
+        display: flex;
+        flex-direction: column;
     }
 
-    th {
-        background-color: #f1f5f9;
+    .form-group {
+        margin-bottom: 1.2rem;
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            font-size: 1rem;
+            border: 1.5px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+            }
+        }
     }
 
-    button {
-        background-color: #22c55e;
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
 
-        &:hover {
-            background-color: #16a34a;
+        .btn-submit,
+        .btn-cancel {
+            padding: 0.7rem 1.4rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            user-select: none;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+
+            &:disabled {
+                background-color: #9ac1f5;
+                cursor: not-allowed;
+            }
+
+            &:not(:disabled):hover {
+                background-color: #0056b3;
+            }
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+
+            &:hover {
+                background-color: #5a6268;
+            }
         }
     }
 }
