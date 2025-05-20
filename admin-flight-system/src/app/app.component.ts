@@ -1,11 +1,7 @@
 // app.component.ts
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet, Routes } from '@angular/router';
-import { FlightSearchComponent } from '../app/pages/flight-search/flight-search.component';
+import {  RouterOutlet } from '@angular/router';
 
-const routes: Routes = [
-  { path: '', component: FlightSearchComponent }
-];
 
 @Component({
   selector: 'app-root',

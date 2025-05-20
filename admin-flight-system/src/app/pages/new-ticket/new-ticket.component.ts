@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FlightService, Flight } from '../../services/flight.service'; 
+import { FlightService, Flight } from '../../services/flight.service';
 import { Router } from '@angular/router';
-import {  HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-ticket',
@@ -12,7 +12,7 @@ import {  HttpClientModule } from '@angular/common/http';
   imports: [FormsModule,CommonModule,RouterModule,HttpClientModule],
   templateUrl: './new-ticket.component.html',
   styleUrls: ['./new-ticket.component.scss'],
-  
+
 })
 export class NewTicketComponentt {
   flight = {
@@ -35,8 +35,8 @@ export class NewTicketComponentt {
       seats: this.flight.seats ?? 0,
       departureTime: this.flight.time || ''
     };
-  
-    console.log('Sending flight data:', flightData); // <-- Add 
+
+    console.log('Sending flight data:', flightData); // <-- Add
     this.flightService.createFlight(flightData).subscribe({
       next: (res: any) => {
         console.log('Flight created:', res);

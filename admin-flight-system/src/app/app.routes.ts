@@ -17,12 +17,22 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'new-ticket', component: NewTicketComponentt },
-      { path: 'flights', component: FlightSearchComponent },
+      {
+        path: 'new-ticket',
+        loadComponent: () =>
+          import('./pages/new-ticket/new-ticket.component').then(
+            m => m.NewTicketComponentt
+          )
+      },
+      {
+        path: 'flights',
+        loadComponent: () =>
+          import('./pages/flight-search/flight-search.component').then(
+            m => m.FlightSearchComponent
+          )
+      },
       { path: 'payment', component: PaymentComponent },
-      
-      
     ]
   },
-  { path: '**', redirectTo: 'login' } // fallback
+  { path: '**', redirectTo: 'login' }
 ];

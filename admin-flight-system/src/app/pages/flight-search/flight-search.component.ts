@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FlightService, Flight } from '../../services/flight.service'; // ✅ Make sure this path is correct
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule,HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './flight-search.component.html',
   styleUrls: ['./flight-search.component.scss'],
+
 })
 export class FlightSearchComponent implements OnInit {
 onFilterChange() {
@@ -38,7 +38,7 @@ throw new Error('Method not implemented.');
       const depTimeStr = flight.departureTime instanceof Date
         ? flight.departureTime.toISOString()
         : String(flight.departureTime);
-  
+
       return (
         (!this.filters.date || depTimeStr.startsWith(this.filters.date)) &&
         (!this.filters.from || flight.origin.toLowerCase().includes(this.filters.from.toLowerCase())) &&
@@ -47,5 +47,5 @@ throw new Error('Method not implemented.');
       );
     });
   }
-  
+
 }

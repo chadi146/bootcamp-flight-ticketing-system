@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
-import { PaymentStatus } from '@prisma/client';  // Import enum from Prisma client
+ import { PaymentStatus } from '@prisma/client';  // Import enum from Prisma client
 
 // ✅ Create Payment - no token required
 export const createPayment = async (req: Request, res: Response): Promise<void> => {
