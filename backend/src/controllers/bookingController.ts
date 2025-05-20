@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
+<<<<<<< HEAD
 import { PrismaClient} from '@prisma/client';
 import { BookingStatus, PaymentStatus } from '@prisma/client';
+=======
+import prisma from '../config/prisma';
+import { BookingStatus } from '@prisma/client';
+>>>>>>> 08314671e44caa86ac704763ee98f310c7e8c22e
 
 const prisma = new PrismaClient();
 
