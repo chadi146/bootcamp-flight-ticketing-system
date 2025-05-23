@@ -1,79 +1,74 @@
-.new-flight-form {
-    max-width: 480px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* Container */
+h2 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
 
-    form {
-        display: flex;
-        flex-direction: column;
-    }
+/* Form styling */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
 
-    .form-group {
-        margin-bottom: 1.2rem;
+.filter-form input {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1 1 150px;
+    transition: border-color 0.3s;
+}
 
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: #333;
-        }
+.filter-form input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
 
-        input {
-            width: 100%;
-            padding: 0.6rem 0.8rem;
-            font-size: 1rem;
-            border: 1.5px solid #ccc;
-            border-radius: 4px;
-            transition: border-color 0.3s ease;
+/* Table styling */
+.flight-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
 
-            &:focus {
-                outline: none;
-                border-color: #007bff;
-                box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
-            }
-        }
-    }
+.flight-table thead {
+    background-color: #3498db;
+    color: white;
+}
 
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
+.flight-table th,
+.flight-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
 
-        .btn-submit,
-        .btn-cancel {
-            padding: 0.7rem 1.4rem;
-            font-size: 1rem;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            user-select: none;
-        }
+.flight-table tbody tr:hover {
+    background-color: #f0f8ff;
+}
 
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
+/* Book button */
+.flight-table button {
+    padding: 0.4rem 0.8rem;
+    background-color: #27ae60;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-            &:disabled {
-                background-color: #9ac1f5;
-                cursor: not-allowed;
-            }
+.flight-table button:hover {
+    background-color: #219150;
+}
 
-            &:not(:disabled):hover {
-                background-color: #0056b3;
-            }
-        }
-
-        .btn-cancel {
-            background-color: #6c757d;
-            color: white;
-
-            &:hover {
-                background-color: #5a6268;
-            }
-        }
-    }
+/* No results text */
+ng-template p {
+    font-style: italic;
+    color: #888;
+    margin-top: 1rem;
 }

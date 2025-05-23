@@ -16,7 +16,7 @@
       <th>To</th>
       <th>Time</th>
       <th>Price ($)</th>
-      <!-- <th>Action</th> -->
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -27,9 +27,10 @@
       <td>{{ flight.destination }}</td>
       <td>{{ flight.departureTime | date: 'shortTime' }}</td>
       <td>{{ flight.price }}</td>
-      <!-- <td>
-        <button [routerLink]="['/new-ticket', flight.id]">Book</button>
-      </td> -->
+       <td>
+        <button (click)="bookFlight(flight.id)">Book</button>
+
+      </td> 
     </tr>
   </tbody>
 </table>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { BookingService, Booking } from '../../services/booking.service';
+import { BookingService } from '../../services/booking.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,22 +18,40 @@ export class DashboardComponent implements OnInit {
     { label: 'Payments', value: 0 }
   ];
 
-  recentBookings: Booking[] = [];
+  recentBookings: any[] = [];
 
-  constructor(private bookingService: BookingService) {}
+  constructor(private bookingService: BookingService, private http: HttpClient) {}
 
   ngOnInit() {
     this.loadRecentBookings();
-    // Similarly load stats by calling Users, Flights, Payments services
+    this.loadFlightCount(); // call it to load flights count
   }
 
   loadRecentBookings() {
     this.bookingService.getBookings().subscribe({
-      next: (bookings) => {
-        this.recentBookings = bookings.slice(0, 5); // show recent 5 bookings
-        this.stats.find(s => s.label === 'Bookings')!.value = bookings.length;
+      next: (bookings: any[]) => {
+        this.recentBookings = bookings.slice(0, 5);
+        const bookingStat = this.stats.find(s => s.label === 'Bookings');
+        if (bookingStat) {
+          bookingStat.value = bookings.length;
+        }
       },
-      error: (err) => console.error('Failed to load bookings', err)
+      error: (err: any) => console.error('Failed to load bookings', err)
     });
+  }
+
+  loadFlightCount() {
+    this.http.get<{ count: number }>('http://localhost:5000/api/flights/count')
+      .subscribe({
+        next: (res: { count: number; }) => {
+          const flightStat = this.stats.find(stat => stat.label === 'Flights'); // label corrected to 'Flights'
+          if (flightStat) {
+            flightStat.value = res.count;
+          }
+        },
+        error: (err: any) => {
+          console.error('Failed to load flight count', err);
+        }
+      });
   }
 }

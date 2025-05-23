@@ -1,8 +1,8 @@
-import { Component, importProvidersFrom, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { FlightService, Flight } from '../../services/flight.service'; // ✅ Make sure this path is correct
+import { RouterModule, Router } from '@angular/router';
+import { FlightService, Flight } from '../../services/flight.service';
 
 @Component({
   selector: 'app-flight-search',
@@ -10,12 +10,8 @@ import { FlightService, Flight } from '../../services/flight.service'; // ✅ Ma
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './flight-search.component.html',
   styleUrls: ['./flight-search.component.scss'],
-
 })
 export class FlightSearchComponent implements OnInit {
-onFilterChange() {
-throw new Error('Method not implemented.');
-}
   filters = {
     date: '',
     from: '',
@@ -23,9 +19,9 @@ throw new Error('Method not implemented.');
     maxPrice: '',
   };
 
-  allFlights: Flight[] = []; // ✅ This is needed to store all fetched flights
+  allFlights: Flight[] = [];
 
-  constructor(private flightService: FlightService) {}
+  constructor(private flightService: FlightService, private router: Router) {}
 
   ngOnInit(): void {
     this.flightService.getFlights().subscribe((flights) => {
@@ -33,19 +29,33 @@ throw new Error('Method not implemented.');
     });
   }
 
+  bookFlight(flightId?: number) {
+    if (flightId === undefined) {
+      console.warn('Flight ID is missing');
+      return;
+    }
+    this.router.navigate(['/booking', flightId]);
+  }
+
+  onFilterChange() {
+    // Optionally implement filter side effects here
+  }
+
   get filteredFlights(): Flight[] {
     return this.allFlights.filter((flight) => {
-      const depTimeStr = flight.departureTime instanceof Date
-        ? flight.departureTime.toISOString()
-        : String(flight.departureTime);
+      const depTimeStr =
+        flight.departureTime instanceof Date
+          ? flight.departureTime.toISOString()
+          : String(flight.departureTime);
 
       return (
         (!this.filters.date || depTimeStr.startsWith(this.filters.date)) &&
-        (!this.filters.from || flight.origin.toLowerCase().includes(this.filters.from.toLowerCase())) &&
-        (!this.filters.to || flight.destination.toLowerCase().includes(this.filters.to.toLowerCase())) &&
+        (!this.filters.from ||
+          flight.origin.toLowerCase().includes(this.filters.from.toLowerCase())) &&
+        (!this.filters.to ||
+          flight.destination.toLowerCase().includes(this.filters.to.toLowerCase())) &&
         (!this.filters.maxPrice || flight.price <= +this.filters.maxPrice)
       );
     });
   }
-
 }

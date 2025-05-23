@@ -1,14 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './pages/layout/layout.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { NewTicketComponentt } from './pages/new-ticket/new-ticket.component';
-import { UserComponent } from './pages/user/user.component';
-import { FlightSearchComponent } from './pages/flight-search/flight-search.component';
-import { PaymentComponent } from './pages/payment/payment.component';
 
-
-// Export the routes to make it available for import in other files
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -16,22 +9,31 @@ export const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
       {
         path: 'new-ticket',
         loadComponent: () =>
-          import('./pages/new-ticket/new-ticket.component').then(
-            m => m.NewTicketComponentt
-          )
+          import('./pages/new-ticket/new-ticket.component').then(m => m.NewTicketComponentt)
       },
       {
         path: 'flights',
         loadComponent: () =>
-          import('./pages/flight-search/flight-search.component').then(
-            m => m.FlightSearchComponent
-          )
+          import('./pages/flight-search/flight-search.component').then(m => m.FlightSearchComponent)
       },
-      { path: 'payment', component: PaymentComponent },
+      {
+        path: 'booking/:flightId',
+        loadComponent: () =>
+          import('./pages/booking/booking.component').then(m => m.BookingComponent)
+      },
+      {
+        path: 'payment/:id',
+        loadComponent: () =>
+          import('./pages/payment/payment.component').then(m => m.PaymentComponent)
+      }
     ]
   },
   { path: '**', redirectTo: 'login' }

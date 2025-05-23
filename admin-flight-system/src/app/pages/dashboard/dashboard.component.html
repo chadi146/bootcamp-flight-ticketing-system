@@ -18,14 +18,15 @@
   </thead>
   <tbody>
     <tr *ngFor="let booking of recentBookings">
-      <td>{{ booking.user }}</td>
-      <td>{{ booking.flight }}</td>
+      <td>{{ booking.userId }}</td>
+      <td>{{ booking.flightId }}</td>
       <td>{{ booking.status }}</td>
     </tr>
   </tbody>
 </table>
 
 <!-- <div class="actions">
+  
  <button routerLink="/new-ticket" routerLinkActive="active">Add Booking</button>
 <button routerLink="/flights" routerLinkActive="active">Search Flights</button>
 <button routerLink="/payment" routerLinkActive="active">Simulate Payment</button>
