@@ -4,7 +4,12 @@
   <input type="date" [(ngModel)]="filters.date" name="date" />
   <input type="text" [(ngModel)]="filters.from" name="from" placeholder="From" />
   <input type="text" [(ngModel)]="filters.to" name="to" placeholder="To" />
-  <input type="number" [(ngModel)]="filters.maxPrice" name="maxPrice" placeholder="Max Price" />
+  <input
+    type="number"
+    [(ngModel)]="filters.maxPrice"
+    name="maxPrice"
+    placeholder="Max Price"
+  />
 </form>
 
 <table class="flight-table" *ngIf="filteredFlights.length > 0; else noResults">
@@ -27,10 +32,9 @@
       <td>{{ flight.destination }}</td>
       <td>{{ flight.departureTime | date: 'shortTime' }}</td>
       <td>{{ flight.price }}</td>
-       <td>
+      <td>
         <button (click)="bookFlight(flight.id)">Book</button>
-
-      </td> 
+      </td>
     </tr>
   </tbody>
 </table>

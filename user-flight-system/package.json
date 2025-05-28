@@ -26,6 +26,7 @@
     "@angular/ssr": "^19.2.11",
     "@ionic/angular": "^8.5.7",
     "bootstrap": "^5.3.6",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "ionicons": "^8.0.8",
     "rxjs": "~7.8.0",

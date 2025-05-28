@@ -22,8 +22,7 @@ export const getBookings = async (req: Request, res: Response) => {
 };
 
 export const createBooking = async (req: Request, res: Response): Promise<void> => {
-  // Use default userId = 1 if no token/user found (for testing without auth)
-  const userId = (req as any).user?.id || 1;  
+  const userId = (req as any).user?.id || 1;
   const { flightId } = req.body;
 
   if (!flightId) {
@@ -33,18 +32,22 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
 
   try {
     const flight = await prisma.flight.findUnique({ where: { id: flightId } });
+
     if (!flight) {
       res.status(404).json({ message: 'Flight not found' });
       return;
     }
 
-    // Count confirmed bookings for this flight
     const confirmedCount = await prisma.booking.count({
       where: {
         flightId,
         status: BookingStatus.confirmed,
       },
     });
+
+    // 👇 DEV ONLY LOGGING (REMOVE IN PROD)
+    console.log(`[Booking Attempt] Flight ${flight.id} has ${flight.seats} seats`);
+    console.log(`[Booking Attempt] Confirmed bookings: ${confirmedCount}`);
 
     if (confirmedCount >= flight.seats) {
       res.status(400).json({ message: 'No seats available' });
@@ -63,7 +66,7 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
       },
     });
 
-    res.status(201).json({ message: 'Booking confirmed', booking });
+    res.status(201).json({ id: booking.id });
   } catch (error) {
     console.error('Error creating booking:', error);
     res.status(500).json({ message: 'Failed to create booking' });
@@ -130,5 +133,35 @@ export const deleteBooking = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error deleting booking:', error);
     res.status(404).json({ message: 'Booking not found or error deleting' });
+  }
+};
+
+export const getBookingById = async (req: Request, res: Response): Promise<void> => {
+  const bookingId = parseInt(req.params.id);
+
+  if (isNaN(bookingId)) {
+    res.status(400).json({ message: 'Invalid booking ID' });
+    return;
+  }
+
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        user: true,
+        flight: true,
+        payment: true,
+      },
+    });
+
+    if (!booking) {
+      res.status(404).json({ message: 'Booking not found' });
+      return;
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error('Error fetching booking by id:', error);
+    res.status(500).json({ message: 'Failed to fetch booking' });
   }
 };

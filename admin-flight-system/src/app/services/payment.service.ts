@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export interface Payment {
   payment: any;
   id?: number;
-  bookingId: string;
+  bookingId: number;
   amount: number;
   status: string;
   paymentDate?: string;

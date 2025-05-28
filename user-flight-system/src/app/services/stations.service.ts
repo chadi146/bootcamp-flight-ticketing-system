@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { IStation } from '../modules/station';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StationsService {
-  private apiUrl = ''; //replace it with real backend url
-  constructor(private http: HttpClient) { }
+  private apiUrl = 'http://localhost:5000/api/flights/locations'; // Update with your actual backend URL
+
+  constructor(private http: HttpClient) {}
 
   getStations(): Observable<string[]> {
-    return this.http.get<string[]>(this.apiUrl);
+    return this.http.get<{ origins: string[]; destinations: string[] }>(this.apiUrl).pipe(
+      map((res) => {
+        const merged = new Set([...res.origins, ...res.destinations]);
+        return Array.from(merged); // remove duplicates
+      })
+    );
   }
-
-  getAllStations(): Observable<IStation[]>{
-    return this.http.get<IStation[]>(this.apiUrl);
-  }
-
 }

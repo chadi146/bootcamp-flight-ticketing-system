@@ -1,0 +1,19 @@
+<div class="p-4">
+    <h2>My Bookings</h2>
+  
+    <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+  
+    <div *ngIf="bookings.length === 0" class="text-muted">No bookings found.</div>
+  
+    <div *ngFor="let booking of bookings" class="card mt-3 p-3 shadow">
+      <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+      <p><strong>Status:</strong> {{ booking.status }}</p>
+      <p><strong>Flight:</strong> {{ booking.flight.flightNumber }} ({{ booking.flight.origin }} → {{ booking.flight.destination }})</p>
+      <p><strong>Date:</strong> {{ booking.flight.date | date }}</p>
+      <p><strong>Time:</strong> {{ booking.flight.time }}</p>
+      <p><strong>Price:</strong> ${{ booking.flight.price }}</p>
+  
+      <button (click)="deleteBooking(booking.id)" class="btn btn-danger mt-2">Delete Booking</button>
+    </div>
+  </div>
+  

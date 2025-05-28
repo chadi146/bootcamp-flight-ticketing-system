@@ -1,48 +1,95 @@
-.results-header {
-  padding: 1rem 2rem;
-  background-color: #e6f7ff;
-  color: #003366;
+/* Container for all content */
+:host {
+  display: block;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
 }
 
-.card-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1rem 2rem;
+/* Message when no flights found */
+p {
+  color: #888;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 2rem;
 }
 
-.flight-card {
-  background: white;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  width: 250px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Heading */
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
 }
 
-.flight-card h3 {
-  margin: 0;
-  color: #00264d;
+/* List styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.flight-card p {
+li {
+  background-color: #f4f4f4;
   margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
 }
 
-.btn {
-  background-color: #00bfff;
+li:hover {
+  background-color: #e8e8e8;
+}
+
+/* Button styling */
+button {
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  margin-right: 0.5rem;
-  border-radius: 4px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+li {
+  background-color: #f4f4f4;
+  margin: 0.75rem 0;
+  padding: 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+li {
+  background-color: #f9f9f9;
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
   cursor: pointer;
 }
 
-.btn.secondary {
-  background-color: #006699;
-}
-
-.btn:hover {
-  opacity: 0.9;
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

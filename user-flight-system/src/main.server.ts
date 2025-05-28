@@ -1,7 +1,21 @@
-import { bootstrapApplication } from '@angular/platform-browser';
+import { renderApplication, provideServerRendering } from '@angular/platform-server';
+import { bootstrapApplication, provideClientHydration } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { config } from './app/app.config.server';
+import { appConfig } from './app/app.config';
 
-const bootstrap = () => bootstrapApplication(AppComponent, config);
-
-export default bootstrap;
+export function render(url: string, document: string): Promise<string> {
+  return renderApplication(() =>
+    bootstrapApplication(AppComponent, {
+      ...appConfig,
+      providers: [
+        ...(appConfig.providers || []),
+        provideServerRendering(),
+        provideClientHydration()
+      ],
+    }),
+    {
+      document,
+      url,
+    }
+  );
+}

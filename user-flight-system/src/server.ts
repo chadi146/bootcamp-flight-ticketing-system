@@ -7,27 +7,22 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { render } from './main.server'; // render function from main.server.ts
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
+const templateHtml = readFileSync(resolve(browserDistFolder, 'index.html'), 'utf-8');
+
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+// Optional: Add REST API endpoints
+// app.get('/api/**', (req, res) => { ... });
 
 /**
- * Serve static files from /browser
+ * Serve static assets from /browser
  */
 app.use(
   express.static(browserDistFolder, {
@@ -38,7 +33,15 @@ app.use(
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Handle Angular SSR for all other routes
+ */
+app.get('*', async (req, res) => {
+  const html = await render(req.url, templateHtml);
+  res.send(html);
+});
+
+/**
+ * Fallback for AngularNodeAppEngine
  */
 app.use('/**', (req, res, next) => {
   angularApp
@@ -50,8 +53,7 @@ app.use('/**', (req, res, next) => {
 });
 
 /**
- * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ * Start the server
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
@@ -60,7 +62,4 @@ if (isMainModule(import.meta.url)) {
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
 export const reqHandler = createNodeRequestHandler(app);

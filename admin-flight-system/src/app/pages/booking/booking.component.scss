@@ -1,49 +1,30 @@
-/* booking.component.css */
+.booking-container {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
-.error {
-    color: #d93025;
-    /* red error color */
-    background-color: #fce8e6;
-    border: 1px solid #d93025;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    font-weight: 600;
-}
+    h2 {
+        margin-bottom: 1rem;
+    }
 
-h2 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
+    p {
+        margin: 0.5rem 0;
+    }
 
-p {
-    font-size: 1.1rem;
-    margin: 6px 0;
-    color: #34495e;
-}
+    .loading {
+        color: #007bff;
+    }
 
-strong {
-    color: #2c3e50;
-}
+    .error {
+        color: #dc3545;
+    }
 
-button {
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-button:disabled {
-    background-color: #a0a0a0;
-    cursor: not-allowed;
-}
-
-button:not(:disabled):hover {
-    background-color: #155a9e;
+    button {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+    }
 }

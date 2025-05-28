@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlightService } from '../../services/flight.service';
 import { BookingService } from '../../services/booking.service';
+import { Flight } from '../../services/flight.service'; // adjust path as needed
 
 @Component({
   selector: 'app-booking',
@@ -35,9 +36,16 @@ export class BookingComponent implements OnInit {
   }
 
   loadFlight(): void {
+    this.loading = true;
     this.flightService.getFlightById(this.flightId).subscribe({
-      next: (flight) => this.flight =undefined,
-      error: () => this.error = 'Flight not found.'
+      next: (flight) => {
+        this.flight = flight;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Flight not found.';
+        this.loading = false;
+      }
     });
   }
 
@@ -48,8 +56,7 @@ export class BookingComponent implements OnInit {
     }
 
     this.loading = true;
-
-    const userId = 1; // Replace with real user id when auth is implemented
+    const userId = 1; // Replace with real user ID when authentication is implemented
 
     const payload: CreateBookingPayload = {
       userId,
@@ -60,7 +67,7 @@ export class BookingComponent implements OnInit {
       next: (booking) => {
         console.log('Booking created with ID:', booking.id);
         this.loading = false;
-        this.router.navigate(['/booking', booking.id]);
+        this.router.navigate(['/payment', booking.id]);
       },
       error: () => {
         this.loading = false;
@@ -71,15 +78,15 @@ export class BookingComponent implements OnInit {
 }
 
 // Local Flight interface
-interface Flight {
-  id: number;
-  flightNumber: string;
-  origin: string;
-  destination: string;
-  date: Date;
-  time: string;
-  price: number;
-}
+// interface Flight {
+//   id: number;
+//   flightNumber: string;
+//   origin: string;
+//   destination: string;
+//   date: Date;
+//   time: string;
+//   price: number;
+// }
 
 // Booking creation DTO
 interface CreateBookingPayload {

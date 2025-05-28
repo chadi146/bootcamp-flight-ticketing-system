@@ -16,7 +16,7 @@ export class FlightSearchComponent implements OnInit {
     date: '',
     from: '',
     to: '',
-    maxPrice: '',
+    maxPrice: null as number | null, // 👈 Properly typed as number or null
   };
 
   allFlights: Flight[] = [];
@@ -38,10 +38,12 @@ export class FlightSearchComponent implements OnInit {
   }
 
   onFilterChange() {
-    // Optionally implement filter side effects here
+    // Trigger change detection if needed
   }
 
   get filteredFlights(): Flight[] {
+    const maxPrice = this.filters.maxPrice != null ? Number(this.filters.maxPrice) : null;
+
     return this.allFlights.filter((flight) => {
       const depTimeStr =
         flight.departureTime instanceof Date
@@ -54,7 +56,7 @@ export class FlightSearchComponent implements OnInit {
           flight.origin.toLowerCase().includes(this.filters.from.toLowerCase())) &&
         (!this.filters.to ||
           flight.destination.toLowerCase().includes(this.filters.to.toLowerCase())) &&
-        (!this.filters.maxPrice || flight.price <= +this.filters.maxPrice)
+        (maxPrice === null || flight.price <= maxPrice)
       );
     });
   }

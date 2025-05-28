@@ -1,10 +1,37 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
 
+
+
 export const getFlights = async (req: Request, res: Response) => {
-  const flights = await prisma.flight.findMany();
-  res.json(flights);
+  try {
+    const { from, to, date } = req.query;
+
+    const flights = await prisma.flight.findMany({
+      where: {
+        ...(from && { from: String(from) }),
+        ...(to && { to: String(to) }),
+        ...(date && { date: String(date) })
+      }
+    });
+
+    res.json(flights);
+  } catch (err) {
+    console.error('Error fetching flights:', err);
+    res.status(500).json({ message: 'Server error fetching flights' });
+  }
 };
+
+export const getFlightsCount = async (req: Request, res: Response) => {
+  try {
+    const count = await prisma.flight.count();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error counting flights:', error);
+    res.status(500).json({ message: 'Failed to count flights' });
+  }
+};
+
 
 export const createFlight = async (req: Request, res: Response) => {
   const { flightNumber, origin, destination, date, time, duration, price, seats } = req.body;
@@ -69,26 +96,33 @@ export const deleteFlight = async (req: Request, res: Response) => {
   }
 };
 
+interface Origin {
+  origin: string;
+}
+
+interface Destination {
+  destination: string;
+}
 
 export const getFlightLocations = async (req: Request, res: Response) => {
   try {
-    const origins = await prisma.flight.findMany({
+    // Fetch distinct origins
+    const originRows: Origin[] = await prisma.flight.findMany({
       distinct: ['origin'],
       select: { origin: true },
     });
 
-    const destinations = await prisma.flight.findMany({
+    // Fetch distinct destinations
+    const destinationRows: Destination[] = await prisma.flight.findMany({
       distinct: ['destination'],
       select: { destination: true },
     });
 
-    const uniqueOrigins = origins.map((o: { origin: string }) => o.origin);
-    const uniqueDestinations = destinations.map((d: { destination: string }) => d.destination);
+    // Extract strings
+    const origins = originRows.map(o => o.origin);
+    const destinations = destinationRows.map(d => d.destination);
 
-    res.json({
-      origins: uniqueOrigins,
-      destinations: uniqueDestinations,
-    });
+    res.json({ origins, destinations });
   } catch (error) {
     console.error('Error fetching flight locations:', error);
     res.status(500).json({ error: 'Failed to fetch flight locations' });
@@ -114,3 +148,40 @@ export const getFlightById = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+// flightsController.js
+
+export const searchFlights = async (req: Request, res: Response) => {
+  try {
+    const from = req.query.from as string | undefined;
+    const to = req.query.to as string | undefined;
+    const date = req.query.date as string | undefined;
+
+    if (!from || !to || !date) {
+      return res.status(400).json({ message: 'Missing search parameters' });
+    }
+
+    const searchDate = new Date(date);
+    if (isNaN(searchDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date format' });
+    }
+
+    const formattedDate = searchDate.toISOString().split('T')[0];
+
+    const flights = await prisma.flight.findMany({
+      where: {
+        origin: { equals: from, mode: 'insensitive' },
+        destination: { equals: to, mode: 'insensitive' },
+        date: formattedDate,
+      },
+    });
+
+    return res.json(flights);
+  } catch (error) {
+    console.error('Error searching flights:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+

@@ -1,31 +1,22 @@
-<div class="home-container">
-  <div class="form-container">
-    <form class="search-form">
-      <div class="input-group">
-        <label for="station-from">From:</label>
-        <select id="station-from" class="input-box">
-          <option *ngFor="let station of stations" [value]="station">{{ station }}</option>
-        </select>
-      </div>
+<form (ngSubmit)="search()">
+  <label for="from">From:</label>
+  <select id="from" [(ngModel)]="from" name="from" required>
+    <option value="" disabled selected>Select origin</option>
+    <option *ngFor="let station of fromStations" [value]="station">
+      {{ station }}
+    </option>
+  </select>
 
-      <div class="input-group">
-        <label for="station-to">To:</label>
-        <select id="station-to" class="input-box">
-          <option *ngFor="let station of stations" [value]="station">{{ station }}</option>
-        </select>
-      </div>
+  <label for="to">To:</label>
+  <select id="to" [(ngModel)]="to" name="to" required>
+    <option value="" disabled selected>Select destination</option>
+    <option *ngFor="let station of toStations" [value]="station">
+      {{ station }}
+    </option>
+  </select>
 
-      <div class="input-group">
-        <label for="travel-date">Date:</label>
-        <input id="travel-date" type="date" class="input-box" />
-      </div>
+  <label for="date">Date:</label>
+  <input id="date" type="date" [(ngModel)]="date" name="date" required />
 
-      <button type="button" class="search-btn" (click)="search()">Search</button>
-    </form>
-  </div>
-
-  <div class="image-container">
-    <h1 class="main-heading">Book Your Flight with <br><span class="image-span">ALTIVIO</span></h1>
-    <img src="/user-flight-system/public/fi2.jpg" alt="Flights" />
-  </div>
-</div>
+  <button type="submit">Search Flights</button>
+</form>

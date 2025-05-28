@@ -1,17 +1,18 @@
-<div *ngIf="error" class="error">{{ error }}</div>
+<div class="booking-container">
+  <div *ngIf="loading" class="loading">Loading flight details...</div>
 
-<div *ngIf="flight; else loadingTemplate">
-  <h2>Booking Flight {{ flight.flightNumber }}</h2>
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
 
-  <p><strong>From:</strong> {{ flight.origin }}</p>
-  <p><strong>To:</strong> {{ flight.destination }}</p>
-  <p><strong>Date:</strong> {{ flight.date | date:'yyyy-MM-dd' }}</p>
-  <p><strong>Time:</strong> {{ flight.time }}</p>
-  <p><strong>Price:</strong> ${{ flight.price }}</p>
+  <div *ngIf="!loading && flight">
+    <h2>Flight {{ flight.flightNumber }}</h2>
+    <p><strong>From:</strong> {{ flight.origin }}</p>
+    <p><strong>To:</strong> {{ flight.destination }}</p>
+    <p><strong>Date:</strong> {{ flight.date | date:'longDate' }}</p>
+    <p><strong>Time:</strong> {{ flight.time }}</p>
+    <p><strong>Price:</strong> ${{ flight.price }}</p>
 
-  <button (click)="bookFlight()" [disabled]="loading">Confirm Booking</button>
+    <button (click)="bookFlight()" [disabled]="loading">Book Now</button>
+  </div>
 </div>
-
-<ng-template #loadingTemplate>
-  <p>Loading flight details...</p>
-</ng-template>

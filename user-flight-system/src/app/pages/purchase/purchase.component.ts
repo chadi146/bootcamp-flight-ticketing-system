@@ -1,55 +1,90 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-
-interface Flight {
-  id: number;
-  airline: string;
-  time: string;
-  price: number;
-}
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-purchase',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './purchase.component.html',
   styleUrls: ['./purchase.component.css']
 })
 export class PurchaseComponent implements OnInit {
-  flights: Flight[] = [];
+  bookingId = '';
+  amount = '';
+  status = 'accepted';
+  message = '';
+  flightOrigin: string = '';
+  flightDestination: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  private router = inject(Router);
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
-    // Fetch the booked flights from the API
-    this.http.get<Flight[]>(`${environment.apiUrl}/bookings`)
-      .subscribe(response => {
-        this.flights = response;
-      }, error => {
-        console.error('Error fetching bookings', error);
-      });
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['bookingId']) {
+        this.bookingId = params['bookingId'];
+        this.loadBookingDetails(this.bookingId);
+      } else {
+        this.message = 'No booking ID provided';
+      }
+    });
   }
 
-  get total(): number {
-    return this.flights.reduce((sum, flight) => sum + flight.price, 0);
+  loadBookingDetails(id: string) {
+    this.http.get<any>(`${environment.apiUrl}/bookings/${id}`).subscribe({
+      next: (booking) => {
+        this.amount = booking.flight?.price?.toString() || '';
+        this.flightOrigin = booking.flight?.origin || '';
+        this.flightDestination = booking.flight?.destination || '';
+      },
+      error: (err) => {
+        console.error('Failed to load booking details', err);
+        this.message = 'Failed to load booking details';
+      }
+    });
   }
 
-  deleteFlight(flightId: number) {
-    // Make an API call to delete the flight booking
-    this.http.delete(`${environment.apiUrl}/bookings/${flightId}`)
-      .subscribe(response => {
-        // After deleting, fetch updated bookings
-        this.flights = this.flights.filter(flight => flight.id !== flightId);
-      }, error => {
-        console.error('Error deleting flight', error);
-      });
+  makePayment() {
+    if (!this.bookingId) {
+      this.message = 'No booking ID provided';
+      return;
+    }
+
+    const paymentData = {
+      userId: 1, // Replace with actual user id
+      bookingId: parseInt(this.bookingId),
+      amount: parseFloat(this.amount),
+      status: this.status,
+    };
+
+    this.http.post(`${environment.apiUrl}/payments`, paymentData).subscribe({
+      next: (res: any) => {
+        this.message = res.message;
+      },
+      error: (err) => {
+        this.message = err.error?.message || 'Payment failed';
+      }
+    });
   }
 
-  completePurchase() {
-    alert('Purchase completed!');
-    this.router.navigate(['/']);
+  deleteBooking() {
+    if (!this.bookingId) {
+      this.message = 'No booking ID provided';
+      return;
+    }
+
+    this.http.delete(`${environment.apiUrl}/bookings/${this.bookingId}`).subscribe({
+      next: (res: any) => {
+        this.message = res.message;
+      },
+      error: (err) => {
+        this.message = err.error?.message || 'Delete failed';
+      }
+    });
   }
 }
