@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { CanActivateChildFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
-import { AuthService } from './auth.service';
+import { CanActivate, Router } from '@angular/router';
 
-export const AuthGuard: CanActivateChildFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
+@Injectable({
+  providedIn: 'root'
+})
+export class AdminAuthGuard implements CanActivate {
+  constructor(private router: Router) {}
 
-  if (auth.isLoggedIn()) {
+  canActivate(): boolean {
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+
+    if (!isLoggedIn) {
+      this.router.navigate(['/login']); // Redirect to admin login if not logged in
+      return false;
+    }
     return true;
   }
-
-  router.navigate(['/login']);
-  return false;
-};
+}

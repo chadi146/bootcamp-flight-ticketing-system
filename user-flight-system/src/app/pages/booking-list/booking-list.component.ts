@@ -33,18 +33,19 @@ export class BookingListComponent implements OnInit {
     });
   }
 
-  deleteBooking(id: number) {
-    if (!confirm('Are you sure you want to delete this booking?')) return;
+ deleteBooking(id: number) {
+  if (!confirm('Are you sure you want to delete this booking?')) return;
 
-    this.http.delete(`${environment.apiUrl}/bookings/${id}`).subscribe({
-      next: (res: any) => {
-        this.message = res.message || 'Booking deleted successfully';
-        this.bookings = this.bookings.filter(b => b.id !== id);
-      },
-      error: (err) => {
-        console.error('Delete failed', err);
-        this.message = err.error?.message || 'Failed to delete booking';
-      }
-    });
-  }
+  this.http.delete(`${environment.apiUrl}/bookings/${id}`).subscribe({
+    next: (res: any) => {
+      this.message = res.message || 'Booking deleted successfully';
+      this.bookings = this.bookings.filter(b => b.id !== id);
+    },
+    error: (err) => {
+      console.error('Delete failed', err);
+      this.message = err.error?.message || 'Failed to delete booking';
+    }
+  });
+}
+
 }

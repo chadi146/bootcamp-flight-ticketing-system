@@ -4,6 +4,7 @@ import {
   deletePayment,
   getPaymentById,
   getPaymentsByUser,
+  getPaymentsCount,
   updatePaymentStatus,
 } from '../controllers/paymentController';
 
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post('/', createPayment);
 router.get('/', getPaymentsByUser);
+router.get('/count', getPaymentsCount); 
 router.get('/:id', getPaymentById);
 router.put('/:id/status', updatePaymentStatus);
 router.delete('/:id', deletePayment);

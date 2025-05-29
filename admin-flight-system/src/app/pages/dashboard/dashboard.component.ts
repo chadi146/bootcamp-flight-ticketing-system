@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.loadRecentBookings();
     this.loadFlightCount(); // call it to load flights count
+    this.loadPaymentCount();
+    this.loadUserCount();
   }
 
   loadRecentBookings() {
@@ -54,4 +56,33 @@ export class DashboardComponent implements OnInit {
         }
       });
   }
+  loadPaymentCount() {
+    this.http.get<{ count: number }>('http://localhost:5000/payments/count')
+      .subscribe({
+        next: (res: { count: number }) => {
+          const paymentStat = this.stats.find(stat => stat.label === 'Payments');
+          if (paymentStat) {
+            paymentStat.value = res.count;
+          }
+        },
+        error: (err: any) => {
+          console.error('Failed to load payment count', err);
+        }
+      });
+  }
+  
+
+  loadUserCount() {
+    this.http.get<{ count: number }>('http://localhost:5000/api/users/count')
+      .subscribe({
+        next: (res) => {
+          const userStat = this.stats.find(s => s.label === 'Users');
+          if (userStat) {
+            userStat.value = res.count;
+          }
+        },
+        error: (err) => console.error('Failed to load user count', err)
+      });
+  }
+  
 }

@@ -125,3 +125,14 @@ export const deletePayment = async (req: Request, res: Response): Promise<void> 
     res.status(404).json({ message: 'Payment not found or error deleting' });
   }
 };
+
+// ✅ Get total number of payments
+export const getPaymentsCount = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const count = await prisma.payment.count(); // ✔ Correct Prisma method
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error getting payment count:', error);
+    res.status(500).json({ message: 'Error getting payment count', error });
+  }
+};

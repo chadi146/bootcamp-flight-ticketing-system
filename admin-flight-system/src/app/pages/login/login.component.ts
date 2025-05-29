@@ -44,15 +44,21 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-      if (this.auth.login(email, password)) {
-        this.snackBar.open('Login successful!', 'Close', { duration: 2000 });
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.snackBar.open('Invalid credentials', 'Close', { duration: 2000 });
-      }
+    const { email, password } = this.loginForm.value;
+
+    // Example: check hardcoded admin credentials (replace with real backend auth)
+    if (email === 'admin@example.com' && password === 'adminpassword') {
+      // Save login state (e.g., localStorage or a service)
+      localStorage.setItem('isAdminLoggedIn', 'true');
+
+      // Redirect to admin dashboard or other admin page
+      this.router.navigate(['/dashboard']);
+    } else {
+      alert('Invalid admin credentials');
     }
   }
 }

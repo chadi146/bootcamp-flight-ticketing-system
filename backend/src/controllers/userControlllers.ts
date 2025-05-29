@@ -89,3 +89,53 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+
+
+export const getUsersCount = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const count = await prisma.user.count();
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error getting users count:', error);
+    res.status(500).json({ message: 'Error getting users count', error });
+  }
+};
+
+
+
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({ message: 'Email and password are required' });
+    return;
+  }
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      res.status(401).json({ message: 'Invalid email or password' });
+      return;
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      res.status(401).json({ message: 'Invalid email or password' });
+      return;
+    }
+
+    // Return user info without password
+    res.json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Login failed due to server error' });
+  }
+};

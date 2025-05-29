@@ -10,7 +10,7 @@ import bookingRoutes from './routes/bookingRoutes';
 dotenv.config();
 const app = express();
 
-const allowedOrigins = ['http://localhost:4200', 'http://localhost:51716'];
+const allowedOrigins = ['http://localhost:4200', 'http://localhost:4300'];
 
 app.use(cors({
   origin: function(origin, callback) {

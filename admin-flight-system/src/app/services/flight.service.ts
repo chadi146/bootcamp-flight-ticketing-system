@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Flight {
-departureTime: string|number|Date;
   id?: number; // optional when creating new flight
   flightNumber: string;
   origin: string;
@@ -13,6 +12,7 @@ departureTime: string|number|Date;
   duration: string;
   price: number;
   seats: number;
+  departureTime: string | number | Date |null;
 }
 
 @Injectable({
@@ -35,5 +35,9 @@ export class FlightService {
     return this.http.post<Flight>(this.apiUrl, flightData);
   }
 
-  // You can add update and delete methods here similarly
+  deleteFlight(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  // Add updateFlight() if needed later
 }
