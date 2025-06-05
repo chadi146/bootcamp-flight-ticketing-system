@@ -3,7 +3,7 @@ import prisma from '../config/prisma';
  import { PaymentStatus } from '@prisma/client';  // Import enum from Prisma client
 
 // ✅ Create Payment - no token required
-export const createPayment = async (req: Request, res: Response): Promise<void> => {
+export const createPaymentUser = async (req: Request, res: Response): Promise<void> => {
   const { userId, bookingId, amount, status } = req.body;
 
   if (!userId || !bookingId || !amount || !status) {
@@ -134,5 +134,39 @@ export const getPaymentsCount = async (req: Request, res: Response): Promise<voi
   } catch (error) {
     console.error('Error getting payment count:', error);
     res.status(500).json({ message: 'Error getting payment count', error });
+  }
+};
+// paymentController.ts
+
+export const createPayment = async (req: Request, res: Response) => {
+  const { bookingId, amount } = req.body;
+
+  try {
+    const payment = await prisma.payment.create({
+      data: {
+        bookingId,
+        amount,
+        status: 'accepted', // or whatever initial status you prefer
+      },
+    });
+    res.json(payment);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create payment' });
+  }
+};
+
+export const getPaymentByBooking = async (req: Request, res: Response) => {
+  const bookingId = Number(req.params.bookingId);
+  try {
+    const payment = await prisma.payment.findUnique({
+      where: { bookingId },
+      include: { booking: true },
+    });
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+    res.json(payment);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch payment' });
   }
 };

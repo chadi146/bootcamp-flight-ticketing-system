@@ -1,21 +1,61 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma';
+import { startOfDay, endOfDay } from 'date-fns';
 
 
+// export const getFlights = async (req: Request, res: Response) => {
+//   try {
+//     const { from, to, date } = req.query;
+
+//     const flights = await prisma.flight.findMany({
+//       where: {
+//         ...(from && { from: String(from) }),
+//         ...(to && { to: String(to) }),
+//         ...(date && { date: String(date) })
+//       }
+//     });
+
+//     res.json(flights);
+//   } catch (err) {
+//     console.error('Error fetching flights:', err);
+//     res.status(500).json({ message: 'Server error fetching flights' });
+//   }
+// };
 
 export const getFlights = async (req: Request, res: Response) => {
   try {
     const { from, to, date } = req.query;
 
-    const flights = await prisma.flight.findMany({
-      where: {
-        ...(from && { from: String(from) }),
-        ...(to && { to: String(to) }),
-        ...(date && { date: String(date) })
-      }
+    const filters: any = {};
+
+    if (from) filters.origin = String(from);
+    if (to) filters.destination = String(to);
+
+    if (date) {
+      const day = new Date(String(date));
+      filters.date = {
+        gte: startOfDay(day),
+        lte: endOfDay(day),
+      };
+    }
+
+    // Fetch flights matching filters
+    const flights = await prisma.flight.findMany({ where: filters });
+
+    // Combine date + time into departureTime
+    const flightsWithDepartureTime = flights.map((flight) => {
+      // flight.date is a Date object, flight.time is 'HH:mm'
+      // Construct ISO string like 'YYYY-MM-DDTHH:mm:00Z'
+      const dateStr = flight.date.toISOString().split('T')[0]; // e.g. '2025-06-05'
+      const departureTimeStr = `${dateStr}T${flight.time}:00Z`;  // e.g. '2025-06-05T14:30:00Z'
+
+      return {
+        ...flight,
+        departureTime: new Date(departureTimeStr),
+      };
     });
 
-    res.json(flights);
+    res.json(flightsWithDepartureTime);
   } catch (err) {
     console.error('Error fetching flights:', err);
     res.status(500).json({ message: 'Server error fetching flights' });

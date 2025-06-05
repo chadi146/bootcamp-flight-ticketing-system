@@ -19,6 +19,7 @@
       <th>Date</th>
       <th>From</th>
       <th>To</th>
+      <th>Date</th>
       <th>Time</th>
       <th>Price ($)</th>
       <th>Action</th>
@@ -30,6 +31,7 @@
       <td>{{ flight.departureTime | date: 'yyyy-MM-dd' }}</td>
       <td>{{ flight.origin }}</td>
       <td>{{ flight.destination }}</td>
+      <td>{{ flight.departureTime | date: 'yyyy-MM-dd' }}</td>
       <td>{{ flight.departureTime | date: 'shortTime' }}</td>
       <td>{{ flight.price }}</td>
       <td>

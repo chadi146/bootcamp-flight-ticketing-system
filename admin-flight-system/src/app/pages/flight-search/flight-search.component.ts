@@ -25,9 +25,14 @@ export class FlightSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.flightService.getFlights().subscribe((flights) => {
-      this.allFlights = flights;
+      this.allFlights = flights.map((flight) => ({
+        ...flight,
+        departureTime: flight.departureTime ? new Date(flight.departureTime) : null,
+      }));
     });
   }
+  
+  
 
   bookFlight(flightId?: number) {
     if (flightId === undefined) {

@@ -15,15 +15,15 @@ import { CommonModule } from '@angular/common';
 
       <input [(ngModel)]="email" placeholder="Email" type="email" />
       <input [(ngModel)]="password" placeholder="Password" type="password" />
-      
+
       <button (click)="login()" [disabled]="loading">
         {{ loading ? 'Logging in...' : 'Login' }}
       </button>
 
       <p class="error" *ngIf="error">{{ error }}</p>
       <p class="register-link">
-        Don't have an account? <a href="#" (click)="navigateRegister($event)">Register here</a>
-
+        Don't have an account? 
+        <a href="#" (click)="navigateRegister($event)">Register here</a>
       </p>
     </div>
   `,
@@ -35,12 +35,14 @@ import { CommonModule } from '@angular/common';
       border: 1px solid #ccc;
       border-radius: 6px;
       text-align: center;
+      background-color: #f9f9f9;
     }
     input {
       width: 100%;
       margin: 10px 0;
       padding: 8px;
       font-size: 1rem;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -48,6 +50,14 @@ import { CommonModule } from '@angular/common';
       margin-top: 15px;
       font-size: 1rem;
       cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
     }
     .error {
       color: red;
@@ -59,15 +69,11 @@ import { CommonModule } from '@angular/common';
     a {
       color: #007bff;
       text-decoration: none;
+      cursor: pointer;
     }
   `]
 })
 export class LoginComponent {
-  navigateRegister(event: Event) {
-    event.preventDefault();
-    this.router.navigate(['/register']);
-  }
-  
   email = '';
   password = '';
   error = '';
@@ -75,28 +81,38 @@ export class LoginComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  navigateRegister(event: Event) {
+    event.preventDefault();
+    this.router.navigate(['/register']);
+  }
+
   login() {
     this.error = '';
     this.loading = true;
 
-    if (!this.email || !this.password) {
+    if (!this.email.trim() || !this.password.trim()) {
       this.error = 'Please enter email and password';
       this.loading = false;
       return;
     }
 
-    this.http.post<{ user: any }>(`${environment.apiUrl}/api/users/login`, {
-      email: this.email,
+    this.http.post<{ token: string; user: any }>(`${environment.apiUrl}/api/users/login`, {
+      email: this.email.trim(),
       password: this.password
     }).subscribe({
       next: (res) => {
+        // Save token and user
+        localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
-        this.router.navigate(['/home']); // Or your default route
+    
+        this.loading = false;
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.error = err.error?.message || 'Login failed';
         this.loading = false;
       }
     });
+    
   }
 }

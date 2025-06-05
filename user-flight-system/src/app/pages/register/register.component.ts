@@ -27,12 +27,14 @@ import { CommonModule } from '@angular/common';
       border: 1px solid #ccc;
       border-radius: 6px;
       text-align: center;
+      background-color: #f9f9f9;
     }
-    input, select {
+    input {
       width: 100%;
       margin: 10px 0;
       padding: 8px;
       font-size: 1rem;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -40,6 +42,13 @@ import { CommonModule } from '@angular/common';
       margin-top: 15px;
       font-size: 1rem;
       cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #0056b3;
     }
     .error {
       color: red;
@@ -51,7 +60,6 @@ export class RegisterComponent {
   name = '';
   email = '';
   password = '';
-  role = '';
   error = '';
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -61,16 +69,19 @@ export class RegisterComponent {
       this.error = 'All fields are required';
       return;
     }
-  
-    this.http.post(`${environment.apiUrl}/api/users/register`, {
-      name: this.name,
-      email: this.email,
+
+    const userData = {
+      name: this.name.trim(),
+      email: this.email.trim(),
       password: this.password,
-      role: 'user' // forcefully set role to user
-    }).subscribe({
+      role: 'user' // Force default role
+    };
+
+    this.http.post(`${environment.apiUrl}/api/users/register`, userData).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: (err) => this.error = err.error?.message || 'Registration failed'
+      error: (err) => {
+        this.error = err?.error?.message || 'Registration failed';
+      }
     });
   }
-  
 }

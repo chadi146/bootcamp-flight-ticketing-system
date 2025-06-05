@@ -1,53 +1,52 @@
+// payment.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { PaymentService, Payment } from '../../services/payment.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PaymentService } from '../../services/payment.service';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent implements OnInit {
   bookingId!: number;
-
-  // For demo: hardcode userId and amount or get from your app state
-  userId = 1;  
-  amount = 100; // Example amount. Ideally fetch based on booking ID
+  amount!: number;
+  paymentStatus: string = 'Not Paid';
 
   constructor(
     private route: ActivatedRoute,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private bookingService: BookingService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.bookingId = +id; // Convert to number
-    } else {
-      alert('Invalid booking ID');
-    }
+  ngOnInit() {
+    this.bookingId = Number(this.route.snapshot.paramMap.get('bookingId')?? 0);
+    // Fetch booking details (to get amount)
+    this.bookingService.getBooking(this.bookingId).subscribe((booking) => {
+      this.amount = booking.totalPrice ?? 0;
+    });
+
+    // Optionally fetch payment status
+    this.paymentService.getPaymentByBooking(this.bookingId).subscribe(
+      (payment) => {
+        this.paymentStatus = payment.status;
+      },
+      () => {
+        this.paymentStatus = 'Not Paid';
+      }
+    );
   }
 
-  makePayment(): void {
-    if (!this.bookingId) {
-      alert('Booking ID not found');
-      return;
-    }
-
-    const paymentData: Partial<Payment> = {
-      bookingId: this.bookingId,
-      amount: this.amount,
-      status: 'COMPLETED'  // or 'PENDING' based on your flow
-    };
-
-    this.paymentService.createPayment(paymentData).subscribe({
-      next: (response) => {
-        alert('Payment successful! Payment ID: ' + response.id);
+  makePayment() {
+    this.paymentService.createPayment({ bookingId: this.bookingId, amount: this.amount }).subscribe({
+      next: (payment) => {
+        this.paymentStatus = payment.status;
+        alert('Payment successful!');
+        // Redirect or update UI as needed
       },
-      error: (error) => {
-        console.error('Payment failed:', error);
-        alert('Payment failed. Please try again.');
-      }
+      error: () => alert('Payment failed, please try again.'),
     });
   }
 }

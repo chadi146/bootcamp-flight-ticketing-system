@@ -1,15 +1,6 @@
-<h2>Payment</h2>
-<p>Booking ID: {{ bookingId }}</p>
+<h2>Payment for Booking #{{ bookingId }}</h2>
 
-<form (ngSubmit)="makePayment()">
-  <label>Card Number:</label>
-  <input type="text" required placeholder="1234 5678 9012 3456" />
+<p>Amount to Pay: ${{ amount }}</p>
+<p>Status: {{ paymentStatus }}</p>
 
-  <label>Expiry:</label>
-  <input type="text" required placeholder="MM/YY" />
-
-  <label>CVV:</label>
-  <input type="text" required placeholder="123" />
-
-  <button type="submit">Pay Now</button>
-</form>
+<button (click)="makePayment()" [disabled]="paymentStatus === 'PAID'">Pay Now</button>

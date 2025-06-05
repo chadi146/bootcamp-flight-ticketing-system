@@ -54,15 +54,29 @@ export class PurchaseComponent implements OnInit {
       this.message = 'No booking ID provided';
       return;
     }
-
+  
+    const userStr = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+  
+    if (!userStr || !token) {
+      this.message = 'User not logged in';
+      return;
+    }
+  
+    const user = JSON.parse(userStr);
+  
     const paymentData = {
-      userId: 1, // Replace with actual user id
+      userId: user.id, // ✅ dynamic user ID
       bookingId: parseInt(this.bookingId),
       amount: parseFloat(this.amount),
       status: this.status,
     };
-
-    this.http.post(`${environment.apiUrl}/payments`, paymentData).subscribe({
+  
+    this.http.post(`${environment.apiUrl}/payments/userpayment`, paymentData, {
+      headers: {
+        Authorization: `Bearer ${token}` // ✅ also include token
+      }
+    }).subscribe({
       next: (res: any) => {
         this.message = res.message;
       },
@@ -71,14 +85,25 @@ export class PurchaseComponent implements OnInit {
       }
     });
   }
+  
 
   deleteBooking() {
     if (!this.bookingId) {
       this.message = 'No booking ID provided';
       return;
     }
-
-    this.http.delete(`${environment.apiUrl}/bookings/${this.bookingId}`).subscribe({
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.message = 'User not logged in';
+      return;
+    }
+  
+    this.http.delete(`${environment.apiUrl}/bookings/${this.bookingId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
       next: (res: any) => {
         this.message = res.message;
       },
@@ -87,4 +112,5 @@ export class PurchaseComponent implements OnInit {
       }
     });
   }
+  
 }

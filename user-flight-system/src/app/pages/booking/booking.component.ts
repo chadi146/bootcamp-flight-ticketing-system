@@ -7,13 +7,15 @@ import { environment } from '../../../environments/environment';
 interface Flight {
   id: number;
   airline: string;
-  from: string;
-  to: string;
+  origin: string;        // <-- use origin and destination, not from/to
+  destination: string;
   date: string;
   time: string;
   price: number;
   seats: number;
+  departureTime?: Date;  // optional combined field added by backend
 }
+
 
 @Component({
   selector: 'app-booking',
@@ -32,6 +34,8 @@ export class BookingComponent implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   message: string | undefined;
+  isLoggedIn: any;
+  
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -62,22 +66,29 @@ export class BookingComponent implements OnInit {
   bookNow(flight: Flight) {
     const bookingData = { flightId: flight.id };
   
-    this.http.post(`${environment.apiUrl}/bookings`, bookingData).subscribe({
+    const token = localStorage.getItem('token'); // 👈 Get the JWT token
+  
+    if (!token) {
+      this.message = 'You must be logged in to book a flight.';
+      return;
+    }
+  
+    this.http.post(`${environment.apiUrl}/bookings`, bookingData, {
+      headers: {
+        Authorization: `Bearer ${token}` // 👈 Add token to headers
+      }
+    }).subscribe({
       next: (response: any) => {
         this.message = 'Booking successful!';
-    
-        // Assuming response.id is the new booking ID
         const bookingId = response.id;
-    
-        // Navigate to purchase page with bookingId as query param
         this.router.navigate(['/purchase'], { queryParams: { bookingId } });
       },
       error: (err) => {
         this.message = err.error?.message || 'Booking failed';
       }
     });
-    
   }
+  
   
   
   
