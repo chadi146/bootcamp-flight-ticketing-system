@@ -3,8 +3,7 @@ import express from 'express';
 import {
   createPayment,
   createPaymentUser,
-  deletePayment,
-  getPaymentById,
+    getPaymentById,
   getPaymentsWithUsers,
   getPaymentsCount,
   updatePaymentStatus,
@@ -22,6 +21,6 @@ router.post('/', createPayment);
 router.get('/count', getPaymentsCount);
 router.get('/:id', getPaymentById);
 router.put('/:id/status', updatePaymentStatus);
-router.delete('/:id', deletePayment);
+
 
 export default router;

@@ -45,25 +45,7 @@ export const createPaymentUser = async (req: Request, res: Response): Promise<vo
     console.error('Error creating payment:', error);
     res.status(500).json({ message: 'Failed to create payment' });
   }
-};
-
-// ✅ Get All Payments (no user filter)
-// export const getPaymentsByUser = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const payments = await prisma.payment.findMany({
-//       include: {
-//         booking: true,
-        
-//       },
-//       orderBy: { paymentDate: 'desc' },
-//     });
-
-//     res.json(payments);
-//   } catch (error) {
-//     console.error('Error fetching payments:', error);
-//     res.status(500).json({ message: 'Failed to fetch payments' });
-//   }
-// };
+};5
 
 // ✅ Get Payment by ID
 export const getPaymentById = async (req: Request, res: Response): Promise<void> => {
@@ -88,7 +70,6 @@ export const getPaymentById = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ message: 'Failed to fetch payment' });
   }
 };
-
 // ✅ Update Payment Status
 export const updatePaymentStatus = async (req: Request, res: Response): Promise<void> => {
   const paymentId = parseInt(req.params.id);
@@ -112,19 +93,6 @@ export const updatePaymentStatus = async (req: Request, res: Response): Promise<
   } catch (error) {
     console.error('Error updating payment status:', error);
     res.status(404).json({ message: 'Payment not found or error updating' });
-  }
-};
-
-// ✅ Delete Payment
-export const deletePayment = async (req: Request, res: Response): Promise<void> => {
-  const paymentId = parseInt(req.params.id);
-
-  try {
-    await prisma.payment.delete({ where: { id: paymentId } });
-    res.json({ message: 'Payment deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting payment:', error);
-    res.status(404).json({ message: 'Payment not found or error deleting' });
   }
 };
 
@@ -154,22 +122,6 @@ export const createPayment = async (req: Request, res: Response) => {
     res.json(payment);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create payment' });
-  }
-};
-
-export const getPaymentByBooking = async (req: Request, res: Response) => {
-  const bookingId = Number(req.params.bookingId);
-  try {
-    const payment = await prisma.payment.findUnique({
-      where: { bookingId },
-      include: { booking: true },
-    });
-    if (!payment) {
-      return res.status(404).json({ message: 'Payment not found' });
-    }
-    res.json(payment);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch payment' });
   }
 };
 
@@ -207,5 +159,45 @@ export const getPaymentsWithUsers = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching payments:', error);
     res.status(500).json({ message: 'Error fetching payments', error });
+  }
+};
+
+export const cancelBookingAndDeletePayment = async (req: Request, res: Response): Promise<void> => {
+  const bookingId = parseInt(req.params.id);
+
+  if (isNaN(bookingId)) {
+    res.status(400).json({ message: 'Invalid booking ID' });
+    return;
+  }
+
+  try {
+    // Check if booking exists
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: { payment: true },
+    });
+
+    if (!booking) {
+      res.status(404).json({ message: 'Booking not found' });
+      return;
+    }
+
+    // If there's a payment, delete it
+    if (booking.payment) {
+      await prisma.payment.delete({
+        where: { bookingId },
+      });
+    }
+
+    // Cancel the booking
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'cancelled' },
+    });
+
+    res.json({ message: 'Booking cancelled and payment deleted (if existed).' });
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    res.status(500).json({ message: 'Failed to cancel booking' });
   }
 };

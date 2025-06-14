@@ -1,0 +1,51 @@
+<div class="container p-4">
+    <h2>My Profile</h2>
+  
+    <div *ngIf="user; else noUser">
+      <p><strong>Name:</strong> {{ user.name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Role:</strong> {{ user.role }}</p>
+  
+      <button class="btn btn-danger mt-3" (click)="logout()">Logout</button>
+  
+      <hr />
+  
+      <!-- <h3>✈ Upcoming Flights:</h3>
+      <ul *ngIf="upcomingFlights.length > 0; else noUpcoming">
+        <li *ngFor="let flight of upcomingFlights">
+          Flight #{{ flight.flightNumber }} | {{ flight.origin }} → {{ flight.destination }} |
+          {{ flight.date | date:'yyyy-MM-dd' }} | Status: {{ flight.status }}
+          <button class="btn btn-primary btn-sm ml-2" (click)="downloadTicket(flight)">Download Ticket</button>
+          <button class="btn btn-warning btn-sm ml-2" (click)="cancelBooking(flight.bookingId)">Cancel Booking</button>
+        </li>
+      </ul>
+      <ng-template #noUpcoming><p>No upcoming flights.</p></ng-template> -->
+  
+      <h3 class="mt-4">✈ My Flights:</h3>
+      <ul *ngIf="pastFlights.length > 0; else noPast">
+        <li *ngFor="let flight of pastFlights">
+          Flight #{{ flight.flightNumber }} | {{ flight.origin }} → {{ flight.destination }} |
+          {{ flight.date | date:'yyyy-MM-dd' }} | Status: {{ flight.status }} |
+          Payment: ${{ flight.paymentAmount }}
+          <button class="btn btn-primary btn-sm ml-2" (click)="downloadTicket(flight)">Download Ticket</button>
+        </li>
+      </ul>
+      <ng-template #noPast><p>No past flights.</p></ng-template>
+  
+      <hr />
+  
+      <div class="search-filter">
+        <input type="text" placeholder="Search flights..." [(ngModel)]="searchTerm" (input)="filterFlights()" />
+        <select [(ngModel)]="filterStatus" (change)="filterFlights()">
+          <option value="all">All</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+  
+    <ng-template #noUser>
+      <p>You are not logged in.</p>
+    </ng-template>
+  </div>
+  

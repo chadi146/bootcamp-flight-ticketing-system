@@ -39,17 +39,18 @@ flights: any;
   }
 
   search() {
-    if (!this.from || !this.to || !this.date) {
-      alert('Please select origin, destination, and date!');
+    if (!this.from && !this.to && !this.date) {
+      alert('Please select at least one search criteria!');
       return;
     }
-
-    this.router.navigate(['/booking'], {
-      queryParams: {
-        from: this.from,
-        to: this.to,
-        date: this.date,
-      },
-    });
+  
+    const queryParams: any = {};
+  
+    if (this.from) queryParams.from = this.from;
+    if (this.to) queryParams.to = this.to;
+    if (this.date) queryParams.date = this.date;
+  
+    this.router.navigate(['/booking'], { queryParams });
   }
+  
 }

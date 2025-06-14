@@ -1,97 +1,62 @@
-/* Container padding */
-.p-4 {
-  padding: 1rem;
-  /* 16px */
-  max-width: 500px;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-}
-
-/* Title */
-.p-4 h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-weight: 600;
+h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-/* Form groups spacing */
-.form-group {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Labels */
-.form-group label {
+.message {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 5px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #555;
+  color: #fff;
+  background-color: #3498db;
+
+
+  &.error {
+    background-color: #e74c3c;
+  }
+
+  &.success {
+    background-color: #2ecc71;
+  }
 }
 
-/* Inputs and selects styling */
-.form-control {
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline-offset: 2px;
-  transition: border-color 0.3s ease;
+p {
+  font-size: 16px;
+  margin: 8px 0;
 }
 
-.form-control:focus {
-  border-color: #38a169;
-  /* green */
-  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.3);
-}
-
-/* Buttons */
-.btn {
-  font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
+button {
+  background-color: #3498db;
+  color: #fff;
   border: none;
+  padding: 10px 18px;
+  margin-top: 12px;
+  font-size: 14px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 1rem;
-  margin-right: 10px;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+
+  &.cancel {
+    background-color: #e74c3c;
+    margin-left: 12px;
+
+    &:hover {
+      background-color: #c0392b;
+    }
+  }
 }
 
-.btn-success {
-  background-color: #38a169;
-  color: white;
-}
-
-.btn-success:hover {
-  background-color: #2f855a;
-}
-
-.btn-danger {
-  background-color: #e53e3e;
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #c53030;
-}
-
-/* Spacing for margin-top utilities */
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
-.mt-3 {
-  margin-top: 1rem;
-}
-
-/* Message styling */
-.text-primary {
-  color: #3182ce;
-  /* blue */
-  font-weight: 600;
-  text-align: center;
-  min-height: 1.5rem;
+ng-template {
+  p {
+    color: #888;
+    text-align: center;
+    font-style: italic;
+  }
 }

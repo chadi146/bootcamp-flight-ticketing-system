@@ -20,32 +20,54 @@ export class BookingListComponent implements OnInit {
   }
 
   loadBookings() {
-    const userId = 1; // Replace this with actual user ID from auth
+    const token = localStorage.getItem('token');
+    console.log('Token:', token);
+    if (!token) {
+      this.message = 'User not logged in.';
+      return;
+    }
 
-    this.http.get<any[]>(`${environment.apiUrl}/bookings/my`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/bookings/my`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }).subscribe({
       next: (data) => {
         this.bookings = data;
+        this.message = '';
       },
       error: (err) => {
         console.error('Failed to fetch bookings', err);
-        this.message = 'Error fetching bookings';
+        this.message = err.error?.message || 'Error fetching bookings';
       }
     });
   }
 
- deleteBooking(id: number) {
-  if (!confirm('Are you sure you want to delete this booking?')) return;
-
-  this.http.delete(`${environment.apiUrl}/bookings/${id}`).subscribe({
-    next: (res: any) => {
-      this.message = res.message || 'Booking deleted successfully';
-      this.bookings = this.bookings.filter(b => b.id !== id);
-    },
-    error: (err) => {
-      console.error('Delete failed', err);
-      this.message = err.error?.message || 'Failed to delete booking';
+  deleteBooking(id: number) {
+    if (!confirm('Are you sure you want to cancel this booking?')) return;
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.message = 'User not logged in.';
+      return;
     }
-  });
-}
-
+  
+    this.http.delete(`${environment.apiUrl}/payments/cancel/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }).subscribe({
+      next: (res: any) => {
+        this.message = res.message || 'Booking cancelled successfully';
+        this.bookings = this.bookings.map(b =>
+          b.id === id ? { ...b, status: 'cancelled' } : b
+        );
+      },
+      error: (err) => {
+        console.error('Cancellation failed', err);
+        this.message = err.error?.message || 'Failed to cancel booking';
+      }
+    });
+  }
+  
 }

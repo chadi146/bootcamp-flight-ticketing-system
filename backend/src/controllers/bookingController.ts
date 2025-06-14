@@ -106,34 +106,6 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
   }
 };
 
-export const getUserBookings = async (req: Request, res: Response): Promise<void> => {
-  // Use default userId = 1 if no token/user found (for testing without auth)
-  const user = (req as any).user;
-
-if (!user || !user.id) {
-  res.status(401).json({ message: 'Unauthorized' });
-  return;
-}
-
-const userId = user.id;
-
-
-  try {
-    const bookings = await prisma.booking.findMany({
-      where: { userId },
-      include: {
-        flight: true,
-        payment: true,
-      },
-      orderBy: { bookingDate: 'desc' },
-    });
-    res.json(bookings);
-  } catch (error) {
-    console.error('Error fetching user bookings:', error);
-    res.status(500).json({ message: 'Failed to fetch user bookings' });
-  }
-};
-
 // Delete a booking
 export const deleteBooking = async (req: Request, res: Response) => {
   const bookingId = parseInt(req.params.id);
@@ -150,11 +122,39 @@ export const deleteBooking = async (req: Request, res: Response) => {
   }
 };
 
+// GET /bookings/my
+export const getUserBookings = async (req: Request, res: Response): Promise<void> => {
+  const user = (req as any).user;
+
+  if (!user || !user.userId) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
+
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: { userId: user.userId },
+      include: {
+        flight: true,
+        payment: true,
+      },
+      orderBy: { bookingDate: 'desc' },
+    });
+
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    res.status(500).json({ message: 'Failed to fetch user bookings' });
+  }
+};
+
+// GET /bookings/:id
 export const getBookingById = async (req: Request, res: Response): Promise<void> => {
   const bookingId = parseInt(req.params.id);
+  const user = (req as any).user;
 
-  if (isNaN(bookingId)) {
-    res.status(400).json({ message: 'Invalid booking ID' });
+  if (!user || isNaN(bookingId)) {
+    res.status(401).json({ message: 'Unauthorized or invalid booking ID' });
     return;
   }
 
@@ -173,9 +173,54 @@ export const getBookingById = async (req: Request, res: Response): Promise<void>
       return;
     }
 
+    // Only admin or booking owner can view
+    if (user.role !== 'admin' && booking.userId !== user.userId) {
+      res.status(403).json({ message: 'Access denied' });
+      return;
+    }
+
     res.json(booking);
   } catch (error) {
-    console.error('Error fetching booking by id:', error);
+    console.error('Error fetching booking by ID:', error);
     res.status(500).json({ message: 'Failed to fetch booking' });
+  }
+};
+export const cancelBookingAndDeletePayment = async (req: Request, res: Response): Promise<void> => {
+  const bookingId = parseInt(req.params.id);
+
+  if (isNaN(bookingId)) {
+    res.status(400).json({ message: 'Invalid booking ID' });
+    return;
+  }
+
+  try {
+    // Check if booking exists
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: { payment: true },
+    });
+
+    if (!booking) {
+      res.status(404).json({ message: 'Booking not found' });
+      return;
+    }
+
+    // If there's a payment, delete it
+    if (booking.payment) {
+      await prisma.payment.delete({
+        where: { bookingId },
+      });
+    }
+
+    // Cancel the booking
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'cancelled' },
+    });
+
+    res.json({ message: 'Booking cancelled and payment deleted (if existed).' });
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    res.status(500).json({ message: 'Failed to cancel booking' });
   }
 };

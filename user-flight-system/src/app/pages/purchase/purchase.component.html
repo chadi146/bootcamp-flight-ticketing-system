@@ -1,37 +1,23 @@
-<div class="p-4">
-  <h2>Purchase Page</h2>
+<h2>Flight Payment</h2>
 
-  <div class="form-group">
-    <label>Booking ID:</label>
-    <input [(ngModel)]="bookingId" type="text" class="form-control" readonly />
-  </div>
+<!-- Display messages -->
+<div *ngIf="message" class="message">{{ message }}</div>
 
-  <div class="form-group">
-    <label>Amount:</label>
-    <input [(ngModel)]="amount" type="text" class="form-control" readonly />
-  </div>
+<!-- If booking data loaded -->
+<div *ngIf="amount && flightOrigin && flightDestination; else noBooking">
+  <p><strong>Flight:</strong> {{ flightOrigin }} → {{ flightDestination }}</p>
+  <p><strong>Amount:</strong> ${{ amount }}</p>
 
-  <div class="form-group">
-    <label>Status:</label>
-    <select [(ngModel)]="status" class="form-control">
-      <option value="accepted">Accepted</option>
-      <option value="failed">Failed</option>
-    </select>
-  </div>
+  <!-- Payment action -->
+  <button (click)="makePayment()">Pay Now</button>
 
-  <!-- Flight Info Section -->
-  <div class="form-group mt-3">
-    <label>Flight Origin:</label>
-    <input [value]="flightOrigin" type="text" class="form-control" readonly />
-  </div>
-
-  <div class="form-group">
-    <label>Flight Destination:</label>
-    <input [value]="flightDestination" type="text" class="form-control" readonly />
-  </div>
-
-  <button (click)="makePayment()" class="btn btn-success mt-2">Make Payment</button>
-  <!-- <button (click)="deleteBooking()" class="btn btn-danger mt-2">Delete Booking</button> -->
-
-  <p class="mt-3 text-primary">{{ message }}</p>
+  <!-- Optional: Allow user to cancel booking -->
+  <button (click)="deleteBooking()" style="margin-left: 10px; color: red;">
+    Cancel Booking
+  </button>
 </div>
+
+<!-- If no booking is found -->
+<ng-template #noBooking>
+  <p>No booking details found.</p>
+</ng-template>

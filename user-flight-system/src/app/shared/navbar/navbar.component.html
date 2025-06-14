@@ -8,15 +8,17 @@
     <a routerLink="/home" routerLinkActive="active">Home</a>
     <a routerLink="/booking" routerLinkActive="active">Booking</a>
     <a routerLink="/purchase" routerLinkActive="active">Purchase</a>
+    <a routerLink="/my-bookings" routerLinkActive="active">My Bookings</a>
+    <a routerLink="/my-profile" routerLinkActive="active">My Profile</a>
     <!-- <a routerLink="/payment" routerLinkActive="active">Payment</a> -->
     <!-- <a routerLink="/login" routerLinkActive="active">Login</a> -->
     <!-- <a routerLink="/register" routerLinkActive="active">Register</a> -->
-    <ng-container *ngIf="isLoggedIn(); else loginLink">
+    <!-- <ng-container *ngIf="isLoggedIn(); else loginLink">
       <button (click)="logout()" class="logout-button">Logout</button>
     </ng-container>
     <ng-template #loginLink>
       <a routerLink="/login" routerLinkActive="active">Login</a>
-    </ng-template>
+    </ng-template> -->
     
   </div>
 </nav>

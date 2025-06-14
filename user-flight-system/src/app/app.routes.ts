@@ -8,12 +8,14 @@ import { BookingListComponent } from './pages/booking-list/booking-list.componen
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { AuthGuard } from '../../src/app/auth.guard'; // ⬅️ import your guard
+import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   // ⬇️ Protected routes
+  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'booking', component: BookingComponent, canActivate: [AuthGuard] },

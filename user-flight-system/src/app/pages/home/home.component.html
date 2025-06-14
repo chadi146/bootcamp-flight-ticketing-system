@@ -1,6 +1,6 @@
 <form (ngSubmit)="search()">
   <label for="from">From:</label>
-  <select id="from" [(ngModel)]="from" name="from" required>
+  <select id="from" [(ngModel)]="from" name="from" >
     <option value="" disabled selected>Select origin</option>
     <option *ngFor="let station of fromStations" [value]="station">
       {{ station }}
@@ -8,7 +8,7 @@
   </select>
 
   <label for="to">To:</label>
-  <select id="to" [(ngModel)]="to" name="to" required>
+  <select id="to" [(ngModel)]="to" name="to" >
     <option value="" disabled selected>Select destination</option>
     <option *ngFor="let station of toStations" [value]="station">
       {{ station }}
@@ -16,7 +16,7 @@
   </select>
 
   <label for="date">Date:</label>
-  <input id="date" type="date" [(ngModel)]="date" name="date" required />
+  <input id="date" type="date" [(ngModel)]="date" name="date"  />
 
   <button type="submit">Search Flights</button>
 </form>
