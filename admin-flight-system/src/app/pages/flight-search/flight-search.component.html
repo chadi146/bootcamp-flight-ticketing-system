@@ -22,7 +22,7 @@
       <th>Date</th>
       <th>Time</th>
       <th>Price ($)</th>
-      <th>Action</th>
+      <!-- <th>Action</th> -->
     </tr>
   </thead>
   <tbody>
@@ -34,9 +34,9 @@
       <td>{{ flight.departureTime | date: 'yyyy-MM-dd' }}</td>
       <td>{{ flight.departureTime | date: 'shortTime' }}</td>
       <td>{{ flight.price }}</td>
-      <td>
+      <!-- <td>
         <button (click)="bookFlight(flight.id)">Book</button>
-      </td>
+      </td> -->
     </tr>
   </tbody>
 </table>

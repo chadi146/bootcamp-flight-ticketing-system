@@ -8,7 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import { AuthService } from '../../auth.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -29,10 +31,11 @@ import { AuthService } from '../../auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
+    private http: HttpClient,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -48,17 +51,25 @@ export class LoginComponent {
       return;
     }
 
+    this.loading = true;
     const { email, password } = this.loginForm.value;
 
-    // Example: check hardcoded admin credentials (replace with real backend auth)
-    if (email === 'admin@example.com' && password === 'adminpassword') {
-      // Save login state (e.g., localStorage or a service)
-      localStorage.setItem('isAdminLoggedIn', 'true');
+    this.http.post<any>(`${environment.apiUrl}/auth/login`, { email, password }).subscribe({
+      next: (res) => {
+        // Save token and user info
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
 
-      // Redirect to admin dashboard or other admin page
-      this.router.navigate(['/dashboard']);
-    } else {
-      alert('Invalid admin credentials');
-    }
+        this.snackBar.open('Login successful', 'Close', { duration: 3000 });
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        const message = err.error?.message || 'Login failed';
+        this.snackBar.open(message, 'Close', { duration: 3000 });
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 }

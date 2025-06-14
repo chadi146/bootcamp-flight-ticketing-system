@@ -96,7 +96,7 @@ export class LoginComponent {
       return;
     }
 
-    this.http.post<{ token: string; user: any }>(`${environment.apiUrl}/api/users/login`, {
+    this.http.post<{ token: string; user: any }>(`${environment.apiUrl}/auth/login`, {
       email: this.email.trim(),
       password: this.password
     }).subscribe({

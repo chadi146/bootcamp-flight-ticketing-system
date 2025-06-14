@@ -56,7 +56,6 @@ model Payment {
   amount      Decimal   @db.Decimal(10, 2)
   status      PaymentStatus
   paymentDate DateTime  @default(now())
-
   booking     Booking   @relation(fields: [bookingId], references: [id])
 }
 

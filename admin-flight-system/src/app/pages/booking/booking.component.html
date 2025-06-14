@@ -1,18 +1,29 @@
-<div class="booking-container">
-  <div *ngIf="loading" class="loading">Loading flight details...</div>
+<h1>Bookings</h1>
 
-  <div *ngIf="error" class="error">
-    <p>{{ error }}</p>
-  </div>
-
-  <div *ngIf="!loading && flight">
-    <h2>Flight {{ flight.flightNumber }}</h2>
-    <p><strong>From:</strong> {{ flight.origin }}</p>
-    <p><strong>To:</strong> {{ flight.destination }}</p>
-    <p><strong>Date:</strong> {{ flight.date | date:'longDate' }}</p>
-    <p><strong>Time:</strong> {{ flight.time }}</p>
-    <p><strong>Price:</strong> ${{ flight.price }}</p>
-
-    <button (click)="bookFlight()" [disabled]="loading">Book Now</button>
-  </div>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Booking ID</th>
+        <th>User ID</th>
+        <th>Flight ID</th>
+        <th>Status</th>
+        <th>Booking Date</th>
+        <th>Payment Status</th> <!-- ✅ Add this -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.id }}</td>
+        <td>{{ booking.userId }}</td>
+        <td>{{ booking.flightId }}</td>
+        <td>{{ booking.status }}</td>
+        <td>{{ booking.bookingDate | date: 'short' }}</td> 
+        <td>
+          <!-- ✅ Show "Paid" if booking.payment exists -->
+          {{ booking.payment ? 'Paid' : 'Not Paid' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -8,6 +8,7 @@
 </div>
 
 <h2>Recent Bookings</h2>
+<div class="bookings-table-wrapper">
 <table class="bookings-table">
   <thead>
     <tr>
@@ -16,6 +17,7 @@
       <th>Status</th>
     </tr>
   </thead>
+  
   <tbody>
     <tr *ngFor="let booking of recentBookings">
       <td>{{ booking.userId }}</td>
@@ -24,10 +26,10 @@
     </tr>
   </tbody>
 </table>
-
+</div>
 <!-- <div class="actions">
   
- <button routerLink="/new-ticket" routerLinkActive="active">Add Booking</button>
+<button routerLink="/new-ticket" routerLinkActive="active">Add Booking</button>
 <button routerLink="/flights" routerLinkActive="active">Search Flights</button>
 <button routerLink="/payment" routerLinkActive="active">Simulate Payment</button>
 

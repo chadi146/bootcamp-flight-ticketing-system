@@ -1,30 +1,43 @@
-.booking-container {
-    padding: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
-    background: #f8f8f8;
+h1 {
+    margin-bottom: 1rem;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
-    h2 {
-        margin-bottom: 1rem;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    thead {
+        background-color: #0c253d;
+        color: white;
+
+        th {
+            text-align: left;
+            padding: 12px;
+            font-size: 14px;
+        }
     }
 
-    p {
-        margin: 0.5rem 0;
-    }
+    tbody {
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
 
-    .loading {
-        color: #007bff;
-    }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
 
-    .error {
-        color: #dc3545;
-    }
-
-    button {
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        font-weight: bold;
+        td {
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+        }
     }
 }

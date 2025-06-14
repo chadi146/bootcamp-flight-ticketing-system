@@ -22,7 +22,17 @@ export const getBookings = async (req: Request, res: Response) => {
 };
 
 export const createBooking = async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).user?.id || 1;
+  const user = (req as any).user;
+
+  if (!user || !user.userId) {
+    console.log('Decoded user in booking:', user);
+
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
+
+  const userId = user.userId;
+
   const { flightId } = req.body;
 
   if (!flightId) {
@@ -44,10 +54,6 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
         status: BookingStatus.confirmed,
       },
     });
-
-    // 👇 DEV ONLY LOGGING (REMOVE IN PROD)
-    console.log(`[Booking Attempt] Flight ${flight.id} has ${flight.seats} seats`);
-    console.log(`[Booking Attempt] Confirmed bookings: ${confirmedCount}`);
 
     if (confirmedCount >= flight.seats) {
       res.status(400).json({ message: 'No seats available' });
@@ -102,7 +108,15 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
 
 export const getUserBookings = async (req: Request, res: Response): Promise<void> => {
   // Use default userId = 1 if no token/user found (for testing without auth)
-  const userId = (req as any).user?.id || 1;
+  const user = (req as any).user;
+
+if (!user || !user.id) {
+  res.status(401).json({ message: 'Unauthorized' });
+  return;
+}
+
+const userId = user.id;
+
 
   try {
     const bookings = await prisma.booking.findMany({

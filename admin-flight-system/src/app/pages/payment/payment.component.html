@@ -1,6 +1,24 @@
-<h2>Payment for Booking #{{ bookingId }}</h2>
-
-<p>Amount to Pay: ${{ amount }}</p>
-<p>Status: {{ paymentStatus }}</p>
-
-<button (click)="makePayment()" [disabled]="paymentStatus === 'PAID'">Pay Now</button>
+<div class="table-wrapper">
+<table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Email</th>
+        <th>Flight</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Payment Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let payment of payments">
+        <td>{{ payment.user.name }}</td>
+        <td>{{ payment.user.email }}</td>
+        <td>{{ payment.flight.flightNumber }}</td>
+        <td>{{ payment.amount }}</td>
+        <td>{{ payment.status }}</td>
+        <td>{{ payment.paymentDate | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>

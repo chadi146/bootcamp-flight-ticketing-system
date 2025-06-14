@@ -36,11 +36,22 @@ export class PurchaseComponent implements OnInit {
   }
 
   loadBookingDetails(id: string) {
-    this.http.get<any>(`${environment.apiUrl}/bookings/${id}`).subscribe({
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.message = 'User not logged in';
+      return;
+    }
+  
+    this.http.get<any>(`${environment.apiUrl}/bookings/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
       next: (booking) => {
         this.amount = booking.flight?.price?.toString() || '';
         this.flightOrigin = booking.flight?.origin || '';
         this.flightDestination = booking.flight?.destination || '';
+        this.message = ''; // clear any previous errors
       },
       error: (err) => {
         console.error('Failed to load booking details', err);
@@ -48,6 +59,7 @@ export class PurchaseComponent implements OnInit {
       }
     });
   }
+  
 
   makePayment() {
     if (!this.bookingId) {

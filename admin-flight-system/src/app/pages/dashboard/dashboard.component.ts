@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   loadRecentBookings() {
     this.bookingService.getBookings().subscribe({
       next: (bookings: any[]) => {
-        this.recentBookings = bookings.slice(0, 5);
+        this.recentBookings = bookings.slice();
         const bookingStat = this.stats.find(s => s.label === 'Bookings');
         if (bookingStat) {
           bookingStat.value = bookings.length;
@@ -54,35 +54,48 @@ export class DashboardComponent implements OnInit {
         error: (err: any) => {
           console.error('Failed to load flight count', err);
         }
-      });
+      }); AbortController
   }
   loadPaymentCount() {
-    this.http.get<{ count: number }>('http://localhost:5000/payments/count')
-      .subscribe({
-        next: (res: { count: number }) => {
-          const paymentStat = this.stats.find(stat => stat.label === 'Payments');
-          if (paymentStat) {
-            paymentStat.value = res.count;
-          }
-        },
-        error: (err: any) => {
-          console.error('Failed to load payment count', err);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+  
+    this.http.get<{ count: number }>('http://localhost:5000/payments/count', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: (res: { count: number }) => {
+        const paymentStat = this.stats.find(stat => stat.label === 'Payments');
+        if (paymentStat) {
+          paymentStat.value = res.count;
         }
-      });
+      },
+      error: (err: any) => {
+        console.error('Failed to load payment count', err);
+      }
+    });
   }
+  
   
 
   loadUserCount() {
-    this.http.get<{ count: number }>('http://localhost:5000/api/users/count')
-      .subscribe({
-        next: (res) => {
-          const userStat = this.stats.find(s => s.label === 'Users');
-          if (userStat) {
-            userStat.value = res.count;
-          }
-        },
-        error: (err) => console.error('Failed to load user count', err)
-      });
+    const token = localStorage.getItem('token');
+    this.http.get<{ count: number }>('http://localhost:5000/api/users/count', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        const userStat = this.stats.find(s => s.label === 'Users');
+        if (userStat) {
+          userStat.value = res.count;
+        }
+      },
+      error: (err) => console.error('Failed to load user count', err)
+    });
   }
+  
   
 }

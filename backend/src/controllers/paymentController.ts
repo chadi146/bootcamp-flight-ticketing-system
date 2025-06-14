@@ -4,6 +4,7 @@ import prisma from '../config/prisma';
 
 // ✅ Create Payment - no token required
 export const createPaymentUser = async (req: Request, res: Response): Promise<void> => {
+  
   const { userId, bookingId, amount, status } = req.body;
 
   if (!userId || !bookingId || !amount || !status) {
@@ -47,21 +48,22 @@ export const createPaymentUser = async (req: Request, res: Response): Promise<vo
 };
 
 // ✅ Get All Payments (no user filter)
-export const getPaymentsByUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const payments = await prisma.payment.findMany({
-      include: {
-        booking: true,
-      },
-      orderBy: { paymentDate: 'desc' },
-    });
+// export const getPaymentsByUser = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const payments = await prisma.payment.findMany({
+//       include: {
+//         booking: true,
+        
+//       },
+//       orderBy: { paymentDate: 'desc' },
+//     });
 
-    res.json(payments);
-  } catch (error) {
-    console.error('Error fetching payments:', error);
-    res.status(500).json({ message: 'Failed to fetch payments' });
-  }
-};
+//     res.json(payments);
+//   } catch (error) {
+//     console.error('Error fetching payments:', error);
+//     res.status(500).json({ message: 'Failed to fetch payments' });
+//   }
+// };
 
 // ✅ Get Payment by ID
 export const getPaymentById = async (req: Request, res: Response): Promise<void> => {
@@ -168,5 +170,42 @@ export const getPaymentByBooking = async (req: Request, res: Response) => {
     res.json(payment);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch payment' });
+  }
+};
+
+export const getPaymentsWithUsers = async (req: Request, res: Response) => {
+  try {
+    const payments = await prisma.payment.findMany({
+      include: {
+        booking: {
+          include: {
+            user: true,
+            flight: true
+          }
+        }
+      }
+    });
+
+    const formatted = payments.map(payment => ({
+      paymentId: payment.id,
+      amount: payment.amount,
+      status: payment.status,
+      paymentDate: payment.paymentDate,
+      user: {
+        id: payment.booking.user.id,
+        name: payment.booking.user.name,
+        email: payment.booking.user.email
+      },
+      flight: {
+        flightNumber: payment.booking.flight.flightNumber,
+        origin: payment.booking.flight.origin,
+        destination: payment.booking.flight.destination
+      }
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    res.status(500).json({ message: 'Error fetching payments', error });
   }
 };

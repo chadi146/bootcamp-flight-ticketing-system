@@ -5,11 +5,12 @@ import {
   createPaymentUser,
   deletePayment,
   getPaymentById,
-  getPaymentsByUser,
+  getPaymentsWithUsers,
   getPaymentsCount,
   updatePaymentStatus,
  // ✅ this must match the export exactly
 } from '../controllers/paymentController'
+import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const router = express.Router();
 
 router.post('/userpayment',createPaymentUser)
 router.post('/', createPayment);
-router.get('/', getPaymentsByUser);
+ router.get('/with-user', getPaymentsWithUsers);
 router.get('/count', getPaymentsCount);
 router.get('/:id', getPaymentById);
 router.put('/:id/status', updatePaymentStatus);

@@ -17,7 +17,6 @@ router.get('/', getBookings);
 router.get('/my', getUserBookings);
 router.get('/:id', getBookingById);
 // User routes — no auth for testing
-
 router.post('/', createBooking);
 router.put('/:id/status', updateBookingStatus);
 router.delete('/:id', deleteBooking);

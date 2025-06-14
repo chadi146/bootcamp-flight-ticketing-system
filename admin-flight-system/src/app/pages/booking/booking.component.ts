@@ -1,104 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FlightService } from '../../services/flight.service';
-import { BookingService } from '../../services/booking.service';
-import { Flight } from '../../services/flight.service'; // adjust path as needed
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { BookingService, Booking } from '../../services/booking.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.scss']
+  styleUrls: ['./booking.component.scss'],
 })
-export class BookingComponent implements OnInit {
-  flightId!: number;
-  flight?: Flight;
-  loading = false;
-  error = '';
+export class BookingListComponent implements OnInit {
+  bookings: Booking[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private flightService: FlightService,
-    private bookingService: BookingService,
-    private router: Router
-  ) {}
+  private bookingService = inject(BookingService);
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('flightId');
-    if (id) {
-      this.flightId = +id;
-      this.loadFlight();
-    } else {
-      this.error = 'Invalid flight ID.';
-    }
+    this.loadBookings();
   }
 
-  loadFlight(): void {
-    this.loading = true;
-    this.flightService.getFlightById(this.flightId).subscribe({
-      next: (flight) => {
-        this.flight = flight;
-        this.loading = false;
+  loadBookings(): void {
+    this.bookingService.getBookings().subscribe({
+      next: (res) => {
+        this.bookings = res;
       },
-      error: () => {
-        this.error = 'Flight not found.';
-        this.loading = false;
-      }
+      error: (err) => {
+        console.error('Failed to load bookings', err);
+      },
     });
   }
-
-  bookFlight(): void {
-    if (!this.flight?.id) {
-      this.error = 'Invalid flight information.';
-      return;
-    }
-
-    this.loading = true;
-    const userId = 1; // Replace with real user ID when authentication is implemented
-
-    const payload: CreateBookingPayload = {
-      userId,
-      flightId: this.flight.id,
-    };
-
-    this.bookingService.createBooking(payload).subscribe({
-      next: (booking) => {
-        console.log('Booking created with ID:', booking.id);
-        this.loading = false;
-        this.router.navigate(['/payment', booking.id]);
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'Booking failed. Please try again later.';
-      }
-    });
-  }
-}
-
-// Local Flight interface
-// interface Flight {
-//   id: number;
-//   flightNumber: string;
-//   origin: string;
-//   destination: string;
-//   date: Date;
-//   time: string;
-//   price: number;
-// }
-
-// Booking creation DTO
-interface CreateBookingPayload {
-  userId: number;
-  flightId: number;
-}
-
-// Booking response (optional, for later use)
-interface Booking {
-  id: number;
-  userId: number;
-  flightId: number;
-  status: string;
-  bookingDate: string;
 }

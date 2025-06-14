@@ -1,52 +1,47 @@
-// payment.component.ts
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PaymentService } from '../../services/payment.service';
-import { BookingService } from '../../services/booking.service';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-payment',
+  standalone: true,
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss'],
+  imports: [CommonModule],
 })
 export class PaymentComponent implements OnInit {
-  bookingId!: number;
-  amount!: number;
-  paymentStatus: string = 'Not Paid';
+  payments: any[] = [];
+payers: any;
 
   constructor(
-    private route: ActivatedRoute,
-    private paymentService: PaymentService,
-    private bookingService: BookingService,
-    private router: Router
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  ngOnInit() {
-    this.bookingId = Number(this.route.snapshot.paramMap.get('bookingId')?? 0);
-    // Fetch booking details (to get amount)
-    this.bookingService.getBooking(this.bookingId).subscribe((booking) => {
-      this.amount = booking.totalPrice ?? 0;
-    });
-
-    // Optionally fetch payment status
-    this.paymentService.getPaymentByBooking(this.bookingId).subscribe(
-      (payment) => {
-        this.paymentStatus = payment.status;
-      },
-      () => {
-        this.paymentStatus = 'Not Paid';
-      }
-    );
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadWhoPaid();
+    }
   }
 
-  makePayment() {
-    this.paymentService.createPayment({ bookingId: this.bookingId, amount: this.amount }).subscribe({
-      next: (payment) => {
-        this.paymentStatus = payment.status;
-        alert('Payment successful!');
-        // Redirect or update UI as needed
+  loadWhoPaid(): void {
+    const token = localStorage.getItem('token');
+    console.log('JWT Token:', token);
+
+    if (!token) return;
+
+    this.http.get<any[]>('http://localhost:5000/payments/with-user', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: (res) => {
+        console.log('Payments response:', res);
+        this.payments = res;
       },
-      error: () => alert('Payment failed, please try again.'),
+      error: (err) => {
+        console.error('Failed to load payment user info', err);
+      }
     });
   }
 }

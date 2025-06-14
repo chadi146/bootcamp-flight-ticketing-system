@@ -5,6 +5,16 @@ import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+interface AuthResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -74,11 +84,15 @@ export class RegisterComponent {
       name: this.name.trim(),
       email: this.email.trim(),
       password: this.password,
-      role: 'user' // Force default role
+      role: 'user' // default role
     };
 
-    this.http.post(`${environment.apiUrl}/api/users/register`, userData).subscribe({
-      next: () => this.router.navigate(['/login']),
+    this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, userData).subscribe({
+      next: (res) => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        this.router.navigate(['/login']);
+      },
       error: (err) => {
         this.error = err?.error?.message || 'Registration failed';
       }

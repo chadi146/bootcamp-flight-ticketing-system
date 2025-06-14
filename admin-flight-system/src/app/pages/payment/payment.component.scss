@@ -1,58 +1,47 @@
-form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 2rem;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    background-color: #fafafa;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.table-wrapper {
+    max-height: 400px; // or whatever height you want
+    overflow-y: auto;
+    border-radius: 8px; // same as your table border-radius for smooth edges
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
 }
 
-h2 {
-    text-align: center;
-    color: #333;
-}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-label {
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-    color: #444;
-}
+    thead {
+        background-color: #0c253d; // Material blue
+        color: white;
+        position: sticky;
+        top: 0; // keeps header fixed when scrolling
+        z-index: 10;
 
-input[type="text"] {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-
-    &:focus {
-        border-color: #007bff;
-        outline: none;
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 14px;
+        }
     }
-}
 
-button[type="submit"] {
-    padding: 0.75rem;
-    background-color: #007bff;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    tbody {
+        tr {
+            &:nth-child(even) {
+                background-color: #f5f5f5;
+            }
 
-    &:hover {
-        background-color: #0056b3;
+            &:hover {
+                background-color: #e3f2fd;
+            }
+
+            td {
+                padding: 12px 16px;
+                font-size: 14px;
+                color: #333;
+                vertical-align: middle;
+            }
+        }
     }
-}
-
-p {
-    text-align: center;
-    font-weight: bold;
-    color: #555;
 }

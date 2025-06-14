@@ -25,12 +25,12 @@ export const routes: Routes = [
           import('./pages/flight-search/flight-search.component').then(m => m.FlightSearchComponent)
       },
       {
-        path: 'booking/:flightId',
+        path: 'booking',
         loadComponent: () =>
-          import('./pages/booking/booking.component').then(m => m.BookingComponent)
+          import('./pages/booking/booking.component').then(m => m.BookingListComponent)
       },
       {
-        path: 'payment/:id',
+        path: 'payment',
         loadComponent: () =>
           import('./pages/payment/payment.component').then(m => m.PaymentComponent)
       }
