@@ -2,65 +2,54 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to right, #87cefa, #00bfff); /* Sky blue gradient */
   padding: 1rem 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: white;
-  font-family: 'Segoe UI', sans-serif;
-  flex-wrap: wrap; /* This will allow items to wrap on smaller screens */
-}
+  background-color: #0a192f;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
-.nav-left .brand-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
-  letter-spacing: 1px;
-  transition: color 0.3s;
-  display: flex;
-  align-items: center;
-}
+  .nav-left .brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #64ffda;
+    text-decoration: none;
+    transition: color 0.3s;
 
-.nav-left .brand-name:hover {
-  color: #00264d;
-}
-
-.nav-left .logo {
-  width: 32px;
-  height: 32px;
-  margin-right: 0.5rem;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-right a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.nav-right a:hover,
-.nav-right a.active {
-  color: #00264d;
-  text-decoration: underline;
-}
-
-/* Mobile responsiveness without stacking under each other */
-@media (max-width: 768px) {
-  .navbar {
-    justify-content: space-between; /* Keeps logo and links spaced */
+    &:hover {
+      color: #ffffff;
+    }
   }
 
   .nav-right {
-    gap: 1rem;
-    flex-wrap: wrap; /* Allows links to wrap when needed */
-  }
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
 
-  .nav-right a {
-    padding: 0.5rem 0;
+    a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+
+      &.active,
+      &:hover {
+        color: #64ffda;
+      }
+    }
+
+    .logout-button {
+      background: transparent;
+      border: 2px solid #64ffda;
+      padding: 0.4rem 1rem;
+      color: #64ffda;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+
+      &:hover {
+        background-color: #64ffda;
+        color: #0a192f;
+      }
+    }
   }
 }
