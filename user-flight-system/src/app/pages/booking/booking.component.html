@@ -1,12 +1,8 @@
-<!-- <div *ngIf="from || to || date" class="search-criteria">
-  <p><strong>From:</strong> {{ from || 'Any' }}</p>
-  <p><strong>To:</strong> {{ to || 'Any' }}</p>
-  <p><strong>Date:</strong> {{ date || 'Any' }}</p>
-</div> -->
-
-<div *ngIf="flights.length === 0">
+<div *ngIf="flights.length === 0 && !message">
   <p>No flights found for the selected criteria.</p>
 </div>
+
+<div *ngIf="message" class="alert alert-info">{{ message }}</div>
 
 <div *ngIf="flights.length > 0">
   <h3>Available Flights</h3>
@@ -14,13 +10,17 @@
     <li *ngFor="let flight of flights">
       <div class="flight-card">
         <h4>{{ flight.airline }}</h4>
-        <p><strong>Route:</strong> {{ flight.origin }} → {{ flight.destination}}</p>
+        <p><strong>Route:</strong> {{ flight.origin }} → {{ flight.destination }}</p>
         <p><strong>Date:</strong> {{ flight.date }} at {{ flight.time }}</p>
         <p><strong>Price:</strong> ${{ flight.price }}</p>
         <p><strong>Seats Available:</strong> {{ flight.seats }}</p>
 
-        <button [disabled]="flight.seats === 0" (click)="bookNow(flight)">
-          {{ flight.seats === 0 ? 'Sold Out' : 'Book Now' }}
+        <button
+          [disabled]="flight.seats === 0 || loadingFlightId === flight.id"
+          (click)="bookNow(flight)"
+          [ngClass]="{'btn-disabled': flight.seats === 0 || loadingFlightId === flight.id}"
+        >
+          {{ loadingFlightId === flight.id ? 'Booking...' : (flight.seats === 0 ? 'Sold Out' : 'Book Now') }}
         </button>
       </div>
     </li>

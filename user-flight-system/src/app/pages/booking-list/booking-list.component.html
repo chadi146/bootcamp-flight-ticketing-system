@@ -1,44 +1,43 @@
-<div class="p-4">
-  <h2 class="mb-3">My Bookings</h2>
+<div *ngFor="let booking of bookings" class="card mt-3 p-3 shadow">
+  <p><strong>Booking ID:</strong> {{ booking.id }}</p>
 
-  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
-
-  <div *ngIf="bookings.length === 0 && !message" class="text-muted">
-    No bookings found.
-  </div>
-
-  <div *ngFor="let booking of bookings" class="card mt-3 p-3 shadow">
-    <p><strong>Booking ID:</strong> {{ booking.id }}</p>
-
-    <!-- Status badge -->
-    <p>
-      <strong>Status:</strong>
-      <span
-        class="badge"
-        [ngClass]="{
-          'bg-success': booking.status === 'confirmed',
-          'bg-secondary': booking.status === 'cancelled'
-        }"
-      >
-        {{ booking.status }}
-      </span>
-    </p>
-
-    <p>
-      <strong>Flight:</strong>
-      {{ booking.flight.flightNumber }} ({{ booking.flight.origin }} → {{ booking.flight.destination }})
-    </p>
-    <p><strong>Date:</strong> {{ booking.flight.date | date }}</p>
-    <p><strong>Time:</strong> {{ booking.flight.time }}</p>
-    <p><strong>Price:</strong> ${{ booking.flight.price }}</p>
-
-    <!-- Delete button only shown if booking is not cancelled -->
-    <button
-      *ngIf="booking.status !== 'cancelled'"
-      (click)="deleteBooking(booking.id)"
-      class="btn btn-danger mt-2"
+  <!-- Status badge -->
+  <p>
+    <strong>Payment Status:</strong>
+    <span
+      class="badge"
+      [ngClass]="{
+        'bg-success': booking.status === 'confirmed',
+        'bg-secondary': booking.status === 'cancelled'
+      }"
     >
-      Cancel Booking
-    </button>
-  </div>
+      {{ booking.status }}
+    </span>
+  </p>
+
+  <p>
+    <strong>Flight:</strong>
+    {{ booking.flight.flightNumber }} ({{ booking.flight.origin }} → {{ booking.flight.destination }})
+  </p>
+  <p><strong>Date:</strong> {{ booking.flight.date | date }}</p>
+  <p><strong>Time:</strong> {{ booking.flight.time }}</p>
+  <p><strong>Price:</strong> ${{ booking.flight.price }}</p>
+
+  <!-- Cancel button shown if booking is NOT cancelled -->
+  <!-- <button
+    *ngIf="booking.status !== 'cancelled'"
+    (click)="deleteBooking(booking.id)"
+    class="btn btn-danger mt-2"
+  >
+    Cancel Booking
+  </button> -->
+
+  <!-- Delete button shown if booking IS cancelled -->
+  <button
+    *ngIf="booking.status === 'cancelled'"
+    (click)="removeBooking(booking.id)"
+    class="btn btn-outline-danger mt-2"
+  >
+    Delete Booking
+  </button>
 </div>

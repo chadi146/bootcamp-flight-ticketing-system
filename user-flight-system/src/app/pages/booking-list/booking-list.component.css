@@ -1,81 +1,86 @@
-/* Container padding */
-.p-4 {
-    padding: 1rem;
-    max-width: 700px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-}
-
-/* Heading */
 h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #333;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Alert message */
-.alert-info {
-    background-color: #e7f3fe;
-    border: 1px solid #b3d8fd;
-    color: #3178c6;
-    padding: 0.75rem 1rem;
-    border-radius: 4px;
+.alert {
+    background-color: #dbeafe;
+    color: #1e40af;
+    padding: 1rem;
+    border-radius: 8px;
     margin-bottom: 1rem;
 }
 
-/* Text when no bookings */
 .text-muted {
-    color: #777;
+    color: #6b7280;
     font-style: italic;
-    margin-top: 1rem;
     text-align: center;
 }
 
-/* Booking card */
 .card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
-    padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
-    transition: box-shadow 0.3s ease;
-    cursor: default;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
 }
 
-/* Hover effect on card */
-.card:hover {
-    box-shadow: 0 8px 16px rgb(0 0 0 / 0.15);
-}
-
-/* Booking details paragraphs */
 .card p {
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: #444;
+    margin: 0.5rem 0;
 }
 
-/* Label bold */
-.card p strong {
+.badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #222;
+    border-radius: 9999px;
 }
 
-/* Delete button */
+.bg-success {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.bg-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
 .btn-danger {
-    background-color: #d9534f;
-    border: none;
+    padding: 0.6rem 1.2rem;
+    background-color: #dc2626;
     color: white;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.9rem;
-    border-radius: 4px;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-top: 0.75rem;
 }
 
-/* Delete button hover */
 .btn-danger:hover {
-    background-color: #c9302c;
+    background-color: #b91c1c;
+}
+/* Add this to your booking-list.component.css */
+
+.btn-outline-danger {
+    color: #dc3545;
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
 }

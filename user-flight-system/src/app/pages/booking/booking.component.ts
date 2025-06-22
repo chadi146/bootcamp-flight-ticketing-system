@@ -7,15 +7,14 @@ import { environment } from '../../../environments/environment';
 interface Flight {
   id: number;
   airline: string;
-  origin: string;        // <-- use origin and destination, not from/to
+  origin: string;
   destination: string;
   date: string;
   time: string;
   price: number;
   seats: number;
-  departureTime?: Date;  // optional combined field added by backend
+  departureTime?: Date;
 }
-
 
 @Component({
   selector: 'app-booking',
@@ -29,13 +28,12 @@ export class BookingComponent implements OnInit {
   to: string = '';
   date: string = '';
   flights: Flight[] = [];
+  message: string | undefined;
+  loadingFlightId: number | null = null;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private http = inject(HttpClient);
-  message: string | undefined;
-  isLoggedIn: any;
-  
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -54,42 +52,46 @@ export class BookingComponent implements OnInit {
       this.http.get<Flight[]>(url).subscribe({
         next: (flights) => {
           this.flights = flights;
+          this.message = undefined;
         },
         error: (err) => {
           console.error('Failed to load flights:', err);
           this.flights = [];
+          this.message = 'Failed to load flights. Please try again later.';
         }
       });
     });
   }
 
   bookNow(flight: Flight) {
-    const bookingData = { flightId: flight.id };
-  
-    const token = localStorage.getItem('token'); // 👈 Get the JWT token
-  
+    if (flight.seats === 0) return;  // safety check
+
+    const token = localStorage.getItem('token');
     if (!token) {
       this.message = 'You must be logged in to book a flight.';
       return;
     }
-  
+
+    this.loadingFlightId = flight.id;
+
+    const bookingData = { flightId: flight.id };
+
     this.http.post(`${environment.apiUrl}/bookings`, bookingData, {
       headers: {
-        Authorization: `Bearer ${token}` // 👈 Add token to headers
+        Authorization: `Bearer ${token}`
       }
     }).subscribe({
       next: (response: any) => {
         this.message = 'Booking successful!';
-        const bookingId = response.id;
-        this.router.navigate(['/purchase'], { queryParams: { bookingId } });
+        // Decrement seats for immediate UI update
+        flight.seats = Math.max(flight.seats - 1, 0);
+        this.loadingFlightId = null;
+        this.router.navigate(['/purchase'], { queryParams: { bookingId: response.id } });
       },
       error: (err) => {
         this.message = err.error?.message || 'Booking failed';
+        this.loadingFlightId = null;
       }
     });
   }
-  
-  
-  
-  
 }

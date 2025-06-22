@@ -29,49 +29,94 @@ import { CommonModule } from '@angular/common';
   `,
   styles: [`
     .login-container {
-      max-width: 320px;
-      margin: 100px auto;
+      max-width: 400px;
+      margin: 80px auto;
       padding: 2rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      background-color: #ffffff;
       text-align: center;
-      background-color: #f9f9f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+  
+    .login-container h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      color: #1e293b;
+    }
+  
     input {
       width: 100%;
-      margin: 10px 0;
-      padding: 8px;
+      padding: 12px;
+      margin-bottom: 1rem;
       font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background-color: #f8fafc;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
       box-sizing: border-box;
     }
+  
+    input:focus {
+      border-color: #38bdf8;
+      background-color: #ffffff;
+      outline: none;
+    }
+  
     button {
       width: 100%;
-      padding: 10px;
-      margin-top: 15px;
+      padding: 12px;
       font-size: 1rem;
-      cursor: pointer;
-      background-color: #007bff;
+      font-weight: 600;
+      background-color: #0ea5e9;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1rem;
     }
+  
+    button:hover:not(:disabled) {
+      background-color: #0284c7;
+    }
+  
     button:disabled {
-      background-color: #999;
+      background-color: #94a3b8;
       cursor: not-allowed;
     }
+  
     .error {
-      color: red;
-      margin-top: 10px;
+      color: #dc2626;
+      margin-top: 1rem;
+      font-size: 0.95rem;
     }
+  
     .register-link {
-      margin-top: 15px;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
     }
-    a {
-      color: #007bff;
+  
+    .register-link a {
+      color: #0ea5e9;
       text-decoration: none;
-      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+  
+    .register-link a:hover {
+      color: #0284c7;
+      text-decoration: underline;
+    }
+  
+    @media (max-width: 500px) {
+      .login-container {
+        margin: 40px 16px;
+        padding: 1.5rem;
+      }
     }
   `]
+  
 })
 export class LoginComponent {
   email = '';

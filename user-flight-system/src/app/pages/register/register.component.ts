@@ -29,42 +29,75 @@ interface AuthResponse {
       <p class="error" *ngIf="error">{{ error }}</p>
     </div>
   `,
-  styles: [`
+ styles: [`
+  .register-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .register-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    color: #1e293b;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  input:focus {
+    border-color: #38bdf8;
+    background-color: #fff;
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0ea5e9;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+  }
+
+  button:hover {
+    background-color: #0284c7;
+  }
+
+  .error {
+    margin-top: 1rem;
+    color: #dc2626;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 500px) {
     .register-container {
-      max-width: 350px;
-      margin: 100px auto;
-      padding: 2rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      text-align: center;
-      background-color: #f9f9f9;
+      margin: 40px 16px;
+      padding: 1.5rem;
     }
-    input {
-      width: 100%;
-      margin: 10px 0;
-      padding: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      font-size: 1rem;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
-  `]
+  }
+`]
+
+
 })
 export class RegisterComponent {
   name = '';

@@ -21,18 +21,16 @@ export const getBookings = async (req: Request, res: Response) => {
   }
 };
 
+
 export const createBooking = async (req: Request, res: Response): Promise<void> => {
   const user = (req as any).user;
 
   if (!user || !user.userId) {
-    console.log('Decoded user in booking:', user);
-
     res.status(401).json({ message: 'Unauthorized' });
     return;
   }
 
   const userId = user.userId;
-
   const { flightId } = req.body;
 
   if (!flightId) {
@@ -41,43 +39,55 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
   }
 
   try {
-    const flight = await prisma.flight.findUnique({ where: { id: flightId } });
+    // Use a transaction to ensure atomicity
+    const result = await prisma.$transaction(async (tx) => {
+      // Lock flight record by querying first
+      const flight = await tx.flight.findUnique({
+        where: { id: flightId },
+        select: { seats: true },
+      });
 
-    if (!flight) {
+      if (!flight) {
+        throw new Error('Flight not found');
+      }
+
+      if (flight.seats <= 0) {
+        throw new Error('No seats available');
+      }
+
+      // Decrement seats count
+      await tx.flight.update({
+        where: { id: flightId },
+        data: {
+          seats: { decrement: 1 }, // decrement the seat count by 1
+        },
+      });
+
+      // Create booking with status confirmed
+      const booking = await tx.booking.create({
+        data: {
+          userId,
+          flightId,
+          status: BookingStatus.confirmed,
+        },
+      });
+
+      return booking;
+    });
+
+    res.status(201).json({ id: result.id });
+  } catch (error: any) {
+    if (error.message === 'Flight not found') {
       res.status(404).json({ message: 'Flight not found' });
-      return;
-    }
-
-    const confirmedCount = await prisma.booking.count({
-      where: {
-        flightId,
-        status: BookingStatus.confirmed,
-      },
-    });
-
-    if (confirmedCount >= flight.seats) {
+    } else if (error.message === 'No seats available') {
       res.status(400).json({ message: 'No seats available' });
-      return;
+    } else {
+      console.error('Error creating booking:', error);
+      res.status(500).json({ message: 'Failed to create booking' });
     }
-
-    const booking = await prisma.booking.create({
-      data: {
-        userId,
-        flightId,
-        status: BookingStatus.confirmed,
-      },
-      include: {
-        flight: true,
-        user: true,
-      },
-    });
-
-    res.status(201).json({ id: booking.id });
-  } catch (error) {
-    console.error('Error creating booking:', error);
-    res.status(500).json({ message: 'Failed to create booking' });
   }
 };
+
 
 // Update booking status (e.g., cancel a booking)
 export const updateBookingStatus = async (req: Request, res: Response): Promise<void> => {
@@ -197,7 +207,7 @@ export const cancelBookingAndDeletePayment = async (req: Request, res: Response)
     // Check if booking exists
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
-      include: { payment: true },
+      include: { payment: true, flight: true }, // include flight info
     });
 
     if (!booking) {
@@ -205,20 +215,31 @@ export const cancelBookingAndDeletePayment = async (req: Request, res: Response)
       return;
     }
 
-    // If there's a payment, delete it
-    if (booking.payment) {
-      await prisma.payment.delete({
-        where: { bookingId },
-      });
-    }
+    // Use transaction to safely update multiple tables
+    await prisma.$transaction(async (tx) => {
+      // If there's a payment, delete it
+      if (booking.payment) {
+        await tx.payment.delete({
+          where: { bookingId },
+        });
+      }
 
-    // Cancel the booking
-    await prisma.booking.update({
-      where: { id: bookingId },
-      data: { status: 'cancelled' },
+      // Cancel the booking
+      await tx.booking.update({
+        where: { id: bookingId },
+        data: { status: 'cancelled' },
+      });
+
+      // Increment available seats for the flight
+      await tx.flight.update({
+        where: { id: booking.flightId },
+        data: {
+          seats: { increment: 1 },
+        },
+      });
     });
 
-    res.json({ message: 'Booking cancelled and payment deleted (if existed).' });
+    res.json({ message: 'Booking cancelled, payment deleted, and seat restored.' });
   } catch (error) {
     console.error('Error cancelling booking:', error);
     res.status(500).json({ message: 'Failed to cancel booking' });

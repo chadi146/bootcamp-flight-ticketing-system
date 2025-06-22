@@ -69,5 +69,31 @@ export class BookingListComponent implements OnInit {
       }
     });
   }
+  removeBooking(id: number) {
+    if (!confirm('Are you sure you want to delete this cancelled booking?')) return;
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.message = 'User not logged in.';
+      return;
+    }
+  
+    this.http.delete(`${environment.apiUrl}/bookings/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }).subscribe({
+      next: (res: any) => {
+        this.message = res.message || 'Booking deleted successfully';
+        // Remove the deleted booking from local array
+        this.bookings = this.bookings.filter(b => b.id !== id);
+      },
+      error: (err) => {
+        console.error('Delete booking failed', err);
+        this.message = err.error?.message || 'Failed to delete booking';
+      }
+    });
+  }
+  
   
 }

@@ -1,119 +1,121 @@
 .container {
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #333;
 }
 
 h2 {
-    margin-bottom: 1rem;
-    color: #222;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
     text-align: center;
 }
 
-h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    color: #555;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 0.25rem;
-}
-
 p {
+    margin: 0.5rem 0;
     font-size: 1rem;
-    margin: 0.25rem 0;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease;
-}
-
-button.btn-danger {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-button.btn-danger:hover {
-    background-color: #bb2d3b;
-}
-
-button.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-button.btn-primary:hover {
-    background-color: #0069d9;
-}
-
-button.btn-warning {
-    background-color: #ffc107;
-    color: #212529;
-}
-
-button.btn-warning:hover {
-    background-color: #e0a800;
-}
-
-ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-li {
-    background: #f9f9f9;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    font-size: 0.95rem;
-    color: #444;
-}
-
-li button {
-    margin-left: 8px;
-    margin-top: 4px;
-}
-
-.search-filter {
-    margin-top: 2rem;
-    display: flex;
-    gap: 12px;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.search-filter input[type="text"],
-.search-filter select {
-    padding: 8px 12px;
-    font-size: 1rem;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    width: 220px;
-    max-width: 100%;
-    transition: border-color 0.3s ease;
-}
-
-.search-filter input[type="text"]:focus,
-.search-filter select:focus {
-    border-color: #007bff;
-    outline: none;
+    color: #1e293b;
 }
 
 hr {
     margin: 2rem 0;
     border: none;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #e2e8f0;
+}
+
+button {
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger {
+    background-color: #dc2626;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.btn-warning {
+    background-color: #facc15;
+    color: #1e293b;
+}
+
+.btn-warning:hover {
+    background-color: #eab308;
+}
+
+ul {
+    padding-left: 1.2rem;
+    margin-top: 1rem;
+    color: #334155;
+}
+
+li {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #38bdf8;
+}
+
+.search-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.search-filter input,
+.search-filter select {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 1rem;
+    background-color: #f8fafc;
+    transition: border-color 0.3s ease;
+}
+
+.search-filter input:focus,
+.search-filter select:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+ng-template p {
+    font-style: italic;
+    color: #64748b;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .search-filter {
+        flex-direction: column;
+    }
+
+    li {
+        font-size: 0.95rem;
+    }
 }
